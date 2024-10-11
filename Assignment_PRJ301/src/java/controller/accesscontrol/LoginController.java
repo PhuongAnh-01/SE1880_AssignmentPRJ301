@@ -22,6 +22,7 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String user = req.getParameter("username");
         String pass = req.getParameter("password");
+        String err = "";
         
         UserDBContext db = new UserDBContext();
         User account = db.get(user, pass);
@@ -30,11 +31,15 @@ public class LoginController extends HttpServlet {
         {
             req.getSession().setAttribute("account", account);
             
-            resp.getWriter().println("login successful!");
+            req.getRequestDispatcher("home.jsp").forward(req, resp);
         }
         else
         {
-            resp.getWriter().println("login failed!");
+           // truyen loi ra
+            err = "Username or password is wrong!";
+            req.setAttribute("err",err);
+            req.getRequestDispatcher("login.jsp").forward(req, resp);
+            
         }
         
         
