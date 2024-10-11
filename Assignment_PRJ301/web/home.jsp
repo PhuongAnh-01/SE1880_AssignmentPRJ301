@@ -67,6 +67,10 @@
                 background-color: #0d6efd;
                 color: #fff;
             }
+            .logout {
+                text-align: right;
+                margin-top: 20px;
+            }
         </style>
 
     </head>
@@ -75,6 +79,11 @@
 
 
     <body>
+        <div class="container">
+            <div class="logout">
+                <a href="logout" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
         <div class="container shadow p-4 bg-white rounded">
             <h2 class="text-center mb-4">Hệ Thống Quản Lý Kế Hoạch Sản Xuất</h2>
             <ul class="nav nav-tabs mb-4" id="managementTabs">

@@ -5,19 +5,25 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Login Page</title>
     </head>
     <body>
         <form action="login" method="POST">
-            username: <input type="text" name="username"/> <br/>
-            password: <input type="password" name="password"/> <br/>
-            <input type="submit" value="Login"/>
+            Username: <input type="text" name="username"/> <br/>
+            Password: <input type="password" name="password"/> <br/>
+            <input type="submit" name="login" value="Login"/>
         </form>
         
-        ${err}
+        <!-- Hiển thị thông báo lỗi nếu có -->
+        <c:if test="${not empty sessionScope.err}">
+            <p style="color:red;">${sessionScope.err}</p>
+            <!-- Xóa thông báo lỗi ngay sau khi hiển thị -->
+            <c:remove var="err" scope="session" />
+        </c:if>
     </body>
 </html>
