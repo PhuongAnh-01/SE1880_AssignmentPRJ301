@@ -22,7 +22,7 @@
                 margin-top: 30px;
             }
             h2 {
-                color: #0d6efd;
+                color: #28a745;
                 font-weight: bold;
             }
             .nav-tabs .nav-link {
@@ -32,7 +32,7 @@
             }
             .nav-tabs .nav-link.active {
                 color: #fff;
-                background-color: #0d6efd;
+                background-color: #28a745;
             }
             table th, table td {
                 text-align: center;
@@ -43,12 +43,12 @@
                 border: 1px solid #dee2e6;
             }
             .btn-primary {
-                background-color: #0d6efd;
-                border-color: #0d6efd;
+                background-color: #28a745;
+                border-color: #28a745;
             }
             .btn-primary:hover {
-                background-color: #0b5ed7;
-                border-color: #0b5ed7;
+                background-color: #218838;
+                border-color: #218838;
             }
             .tab-content {
                 padding: 20px;
@@ -64,7 +64,7 @@
                 font-weight: bold;
             }
             .table thead {
-                background-color: #0d6efd;
+                background-color: #28a745;
                 color: #fff;
             }
             .logout {
@@ -89,7 +89,7 @@
             <ul class="nav nav-tabs mb-4" id="managementTabs">
                 <li class="nav-item">
                     <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#product-list">
-                        <i class="fas fa-box"></i> Danh Sách Sản Phẩm
+                        <i class="fas fa-box" ></i> Danh Sách Sản Phẩm
                     </a>
                 </li>
                 <li class="nav-item">
@@ -112,7 +112,7 @@
             <div class="tab-content">
                 <!-- Danh Sách Sản Phẩm Tab -->
                 <div class="tab-pane fade show active" id="product-list">
-                    <h4 class="mb-4 text-primary">Danh Sách Sản Phẩm</h4>
+                    <h4 class="mb-4 text-primary"style="color:green">Danh Sách Sản Phẩm</h4>
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
