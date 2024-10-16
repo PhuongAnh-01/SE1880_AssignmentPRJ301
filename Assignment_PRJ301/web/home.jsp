@@ -17,7 +17,7 @@
 
             <!-- Button Section -->
             <div class="d-flex justify-content-center mb-4">
-                <a href="listemp" class="btn btn-primary mx-2">Danh sách nhân viên</a>
+                <a href="employee/list" class="btn btn-primary mx-2">Danh sách nhân viên</a>
                 <a href="productList" class="btn btn-primary mx-2">Danh sách sản phẩm</a>
                 <a href="attendance" class="btn btn-primary mx-2">Bảng chấm công</a>
                 <a href="taskList" class="btn btn-primary mx-2">Bảng nhiệm vụ</a>

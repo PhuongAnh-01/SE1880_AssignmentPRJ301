@@ -23,6 +23,7 @@
             <input type="radio" name="gender" value="female"
                    ${!requestScope.e.gender?"checked=\"checked\"":""}
                    /> Female <br/>
+            Dob :<input type="date" name="dob" value="${requestScope.e.dob}" /> <br/>
             Address: <input type="text" name="address" value="${requestScope.e.address}"/> <br/>
             Department: <select name="did">
                 <c:forEach items="${requestScope.depts}" var="d">

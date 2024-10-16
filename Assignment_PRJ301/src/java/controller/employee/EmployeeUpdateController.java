@@ -2,19 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller.employee;
 
+import controller.accesscontrol.BaseRBACController;
 import dal.DepartmentDao;
 import dal.EmployeeDao;
+import entity.accesscontrol.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.Date;
 import java.util.ArrayList;
+import java.sql.Date;
 import model.Department;
 import model.Employee;
 
@@ -22,58 +23,33 @@ import model.Employee;
  *
  * @author ADMIN
  */
-public class EmployeeUpdateController extends HttpServlet {
-   
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EmployeeUpdateController</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EmployeeUpdateController at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
+public class EmployeeUpdateController extends BaseRBACController {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
-    int id = Integer.parseInt(request.getParameter("EmployeeID"));
-        EmployeeDao db = new  EmployeeDao();
+    protected void doAuthorizedGet(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        EmployeeDao db = new EmployeeDao();
         Employee e = db.get(id);
-        if(e!=null)
-        {
+        if (e != null) {
             DepartmentDao dbDept = new DepartmentDao();
             ArrayList<Department> depts = dbDept.list();
-            request.setAttribute("e", e);
-            request.setAttribute("depts", depts);
-            request.getRequestDispatcher("../view/employee/update.jsp").forward(request, response);
+            req.setAttribute("e", e);
+            req.setAttribute("depts", depts);
+            req.getRequestDispatcher("../view/employee/update.jsp").forward(req, resp);
+        } else {
+            resp.sendError(404, "this employee does not exist!");
         }
-        else
-        {
-            response.sendError(404,"this employee does not exist!");
-        }
-    
-    }
-    
-    
 
-    
+    }
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        String raw_name = request.getParameter("name");
-        String raw_gender = request.getParameter("gender");
-        String raw_dob = request.getParameter("dob");
-        String raw_address = request.getParameter("address");
-        String raw_did = request.getParameter("did");
+    protected void doAuthorizedPost(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
+        String raw_id = req.getParameter("id");
+        String raw_name = req.getParameter("name");
+        String raw_gender = req.getParameter("gender");
+        String raw_dob = req.getParameter("dob");
+        String raw_address = req.getParameter("address");
+        String raw_did = req.getParameter("did");
 
         //validate params
         //object binding
@@ -87,25 +63,12 @@ public class EmployeeUpdateController extends HttpServlet {
         d.setId(Integer.parseInt(raw_did));
         e.setDept(d);
 
-       
-
         EmployeeDao db = new EmployeeDao();
         db.update(e);
 
         //return results to user
-        response.getWriter().println("Done");
-
-
+        resp.getWriter().println("Done");
 
     }
-
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }
