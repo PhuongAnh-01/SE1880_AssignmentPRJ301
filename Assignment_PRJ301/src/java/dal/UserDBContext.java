@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  * @author phuonganh
  */
 public class UserDBContext extends DBContext {
-
+    
     public ArrayList<Role> getRoles(String username) {
         String sql = "SELECT r.rid, r.rname, f.fid, f.fname, f.url FROM [User] u \n"
                 + "    INNER JOIN UserRole ur ON ur.username = u.username\n"
@@ -86,5 +86,32 @@ public class UserDBContext extends DBContext {
         return user;
     }
 
+
+    @Override
+    public void insert(Object entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void update(Object entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void delete(Object entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public ArrayList list() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Object get(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    
    
 }

@@ -4,21 +4,33 @@ package dal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
-public class DBContext {
+public abstract class DBContext<T> {
     protected Connection connection;
     public DBContext()
     {
         try {
-            // Edit URL , username, password to authenticate with your MS SQL Server
-            String url = "jdbc:sqlserver://localhost\\TRUONGPHUONGANH:1433;databaseName=Assignment_PRJ301;trustServerCertificate=true;";
-            String username = "phuonganh";
-            String password = "1234";
+            String user = "phuonganh";
+            String pass = "1234";
+            String url = "jdbc:sqlserver://localhost\\TRUONGPHUONGANH:1433;databaseName=Assignment;trustServerCertificate=true;";
+            
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (ClassNotFoundException | SQLException ex) {
-            System.out.println(ex);
+            connection = DriverManager.getConnection(url, user, pass);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
+    
+    public abstract void insert(T entity);
+    public abstract void update(T entity);
+    public abstract void delete(T entity);
+    public abstract ArrayList<T> list();
+    public abstract T get(int id);
 }

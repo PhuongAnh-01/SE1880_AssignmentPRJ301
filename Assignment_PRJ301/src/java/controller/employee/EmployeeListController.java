@@ -42,7 +42,7 @@ public class EmployeeListController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         EmployeeDao db = new EmployeeDao();
-        ArrayList<Employee> emps = db.getAll();
+        ArrayList<Employee> emps = db.list();
         request.setAttribute("emps", emps);
         request.getRequestDispatcher("listemp.jsp").forward(request, response);
     } 

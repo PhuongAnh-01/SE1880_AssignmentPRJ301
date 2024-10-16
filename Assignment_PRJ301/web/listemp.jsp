@@ -44,6 +44,7 @@
                     <td>${e.dob}</td>
                     <td>${e.role}</td>
                     <td>${e.department}</td>
+                    <td><a href="update?id=${e.id}">Edit</a>
                 </tr>
             </c:forEach>
         </table>

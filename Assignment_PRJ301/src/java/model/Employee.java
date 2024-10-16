@@ -11,6 +11,7 @@ import java.sql.Date;
  * @author ADMIN
  */
 public class Employee {
+
     private int id;
     private String name;
     private boolean gender;
@@ -18,11 +19,13 @@ public class Employee {
     private Date dob;
     private String role;
     private String department;
-
+    private Float salary;
+    private Department dept;
+    
     public Employee() {
     }
 
-    public Employee(int id, String name, boolean gender, String address, Date dob, String role, String department) {
+    public Employee(int id, String name, boolean gender, String address, Date dob, String role, String department, Float salary, Department dept) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -30,7 +33,11 @@ public class Employee {
         this.dob = dob;
         this.role = role;
         this.department = department;
+        this.salary = salary;
+        this.dept = dept;
     }
+
+    
 
     public int getId() {
         return id;
@@ -87,6 +94,25 @@ public class Employee {
     public void setDepartment(String department) {
         this.department = department;
     }
+
+    public Float getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Float salary) {
+        this.salary = salary;
+    }
+
     
+
+    public Department getDept() {
+        return dept;
+    }
+
+    public void setDept(Department dept) {
+        this.dept = dept;
+    }
+
     
+
 }
