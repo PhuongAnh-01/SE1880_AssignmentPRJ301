@@ -17,14 +17,19 @@ import model.PlanCampain;
  *
  * @author ADMIN
  */
-public class PlanDao extends DBContext<Plan>{
+public class PlanDao extends DBContext<Plan> {
 
     @Override
     public void insert(Plan entity) {
         try {
+            /**
+             * dau tien insert vao bang plan, query ban ghi day sang insert n
+             * ban ghi vao bang plancampain
+             */
+
             connection.setAutoCommit(false);
-            
-            String sql_insert_plan = "INSERT INTO [Plan]\n"
+
+            String sql_insert_plan = "INSERT INTO [dbo].[Plan]\n"
                     + "           ([PlanName]\n"
                     + "           ,[StartDate]\n"
                     + "           ,[EndDate]\n"
@@ -40,16 +45,23 @@ public class PlanDao extends DBContext<Plan>{
             stm_insert_plan.setDate(3, entity.getEnd());
             stm_insert_plan.setInt(4, entity.getDept().getId());
             stm_insert_plan.executeUpdate();
-            
-            String sql_select_plan = "SELECT @@IDENTITY as PlanID";
-            PreparedStatement stm_select_plan = connection.prepareStatement(sql_select_plan);
+
+            String sql_select_pLan = "SELECT @@IDENTITY as PlanID";
+            PreparedStatement stm_select_plan = connection.prepareStatement(sql_select_pLan);
             ResultSet rs = stm_select_plan.executeQuery();
             if (rs.next()) {
                 entity.setId(rs.getInt("PlanID"));
+                
             }
-            
+
             for (PlanCampain campain : entity.getCampains()) {
-                String sql_insert_campain = "INSERT INTO [PlanCampain]\n"
+                /**
+                 * INSERT CAMPAIN: Moi campain ung voi 1 product -> chay vong
+                 * for tat ca entity.getCampains
+                 *
+                 */
+
+                String sql_insert_campain = "INSERT INTO [dbo].[PlanCampain]\n"
                         + "           ([PlanID]\n"
                         + "           ,[ProductID]\n"
                         + "           ,[Quantity]\n"
@@ -59,17 +71,18 @@ public class PlanDao extends DBContext<Plan>{
                         + "           ,?\n"
                         + "           ,?\n"
                         + "           ,?)";
-                
+
                 PreparedStatement stm_insert_campain = connection.prepareStatement(sql_insert_campain);
                 stm_insert_campain.setInt(1, entity.getId());
                 stm_insert_campain.setInt(2, campain.getProduct().getId());
                 stm_insert_campain.setInt(3, campain.getQuantity());
                 stm_insert_campain.setFloat(4, campain.getCost());
                 stm_insert_campain.executeUpdate();
+
             }
-            
             connection.commit();
-        } catch (SQLException ex) {
+
+       } catch (SQLException ex) {
             Logger.getLogger(PlanDao.class.getName()).log(Level.SEVERE, null, ex);
             try {
                 connection.rollback();
@@ -88,9 +101,8 @@ public class PlanDao extends DBContext<Plan>{
                 Logger.getLogger(PlanDao.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
-    }
-
+        
+}
     @Override
     public void update(Plan entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
@@ -110,5 +122,4 @@ public class PlanDao extends DBContext<Plan>{
     public Plan get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
 }
