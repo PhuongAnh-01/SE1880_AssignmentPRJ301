@@ -4,22 +4,18 @@
  */
 package model;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author ADMIN
  */
-public class Department {
+public class Product {
     private int id;
     private String name;
-    private String type;
-    private ArrayList<Employee> emps = new ArrayList<>();
 
-    public Department() {
+    public Product() {
     }
 
-    public Department(int id, String name) {
+    public Product(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -39,27 +35,7 @@ public class Department {
     public void setName(String name) {
         this.name = name;
     }
-
-    public ArrayList<Employee> getEmps() {
-        return emps;
-    }
-
-    public void setEmps(ArrayList<Employee> emps) {
-        this.emps = emps;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-
+    
+    
+    
 }
-
-
-    
-
-    
