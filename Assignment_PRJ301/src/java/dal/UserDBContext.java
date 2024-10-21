@@ -29,23 +29,23 @@ public class UserDBContext extends DBContext {
             stm = connection.prepareStatement(sql);
             stm.setString(1, username);
             ResultSet rs = stm.executeQuery();
-            Role c_role = new Role();
-            c_role.setId(-1);
+            Role c_role = null;
             while (rs.next()) {
-                int rid = rs.getInt("RoleID");
-                if (rid != c_role.getId()) {
-                    c_role = new Role();
-                    c_role.setId(rid);
-                    c_role.setName(rs.getString("RoleName"));
-                    roles.add(c_role);
-                }
+            int rid = rs.getInt("RoleID");
+            if (c_role == null || rid != c_role.getId()) {
+                // Nếu rid khác với c_role hiện tại, tạo role mới
+                c_role = new Role();
+                c_role.setId(rid);
+                c_role.setName(rs.getString("RoleName"));
+                c_role.setFeatures(new ArrayList<>());  // Khởi tạo danh sách tính năng cho role mới
+                roles.add(c_role);
+            }
 
                 Feature f = new Feature();
-                f.setId(rs.getInt("FeatureID"));
-                f.setName(rs.getString("FeatureName"));
-                f.setUrl(rs.getString("url"));
-                c_role.getFeatures().add(f);
-                f.setRoles(roles);
+            f.setId(rs.getInt("FeatureID"));
+            f.setName(rs.getString("FeatureName"));
+            f.setUrl(rs.getString("url"));
+            c_role.getFeatures().add(f);  // Gán feature vào danh sách của Role hiện tại
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDBContext.class.getName()).log(Level.SEVERE, null, ex);
@@ -63,32 +63,36 @@ public class UserDBContext extends DBContext {
     }
 
     public User get(String username, String password) {
-        String sql = "SELECT UserName  FROM [User] \n"
-                + "WHERE UserName  = ? AND [password] = ?";
-        PreparedStatement stm = null;
-        User user = null;
+    String sql = "SELECT UserName FROM [User] "
+            + "WHERE UserName = ? AND [password] = ?";
+    PreparedStatement stm = null;
+    User user = null;
+    try {
+        stm = connection.prepareStatement(sql);
+        stm.setString(1, username);
+        stm.setString(2, password);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            user = new User();
+            user.setUsername(rs.getString("UserName"));
+            // Lấy danh sách vai trò của người dùng
+            ArrayList<Role> roles = getRoles(username);
+            user.setRoles(roles);
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(UserDBContext.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
         try {
-            stm = connection.prepareStatement(sql);
-            stm.setString(1, username);
-            stm.setString(2, password);
-            ResultSet rs = stm.executeQuery();
-            if (rs.next()) {
-                user = new User();
-                user.setUsername(rs.getString("UserName"));
+            if (stm != null) {
+                stm.close();
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDBContext.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (stm != null) {
-                    stm.close();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(UserDBContext.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
-        return user;
     }
+    return user;
+}
+
 
     @Override
     public void insert(Object entity) {

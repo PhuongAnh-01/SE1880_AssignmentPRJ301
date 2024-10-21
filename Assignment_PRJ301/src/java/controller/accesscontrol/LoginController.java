@@ -28,13 +28,37 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
 
     if (account != null) {
         req.getSession().setAttribute("account", account);
-        resp.sendRedirect("home.jsp");  //   đăng nhập thành công -> chuyển đến home.jsp
+
+        // Kiểm tra xem account có vai trò nào không
+        if (account.getRoles() != null && !account.getRoles().isEmpty()) {
+            String roleName = account.getRoles().get(0).getName();  // Lấy vai trò đầu tiên
+            switch (roleName) {
+                case "Human Resource Management":
+                    resp.sendRedirect("employee/list");
+                    break;
+                case "Workshop Manager":
+                    resp.sendRedirect("manager/assign_tasks");
+                    break;
+                case "Produce Planner":
+                    resp.sendRedirect("plan/production_plan");
+                    break;
+                case "Accountant":
+                    resp.sendRedirect("accounting/calculate_salary");
+                    break;
+                default:
+                    resp.sendError(403, "Bạn không có quyền truy cập tính năng này!");
+                    break;
+            }
+        } else {
+            resp.sendError(403, "Tài khoản không có vai trò nào!");
+        }
     } else {
         // Gán thông báo lỗi vào session
-        req.getSession().setAttribute("err", "Username or password is wrong!");
-        resp.sendRedirect("login");  //  sendRedirect: xóa request cũ và tránh lỗi khi reload
+        req.getSession().setAttribute("err", "Username hoặc password không đúng!");
+        resp.sendRedirect("login");
     }
 }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //pre-processing

@@ -8,8 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Department;
 import model.Plan;
 import model.PlanCampain;
 
@@ -51,7 +53,7 @@ public class PlanDao extends DBContext<Plan> {
             ResultSet rs = stm_select_plan.executeQuery();
             if (rs.next()) {
                 entity.setId(rs.getInt("PlanID"));
-                
+
             }
 
             for (PlanCampain campain : entity.getCampains()) {
@@ -82,7 +84,7 @@ public class PlanDao extends DBContext<Plan> {
             }
             connection.commit();
 
-       } catch (SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(PlanDao.class.getName()).log(Level.SEVERE, null, ex);
             try {
                 connection.rollback();
@@ -101,8 +103,9 @@ public class PlanDao extends DBContext<Plan> {
                 Logger.getLogger(PlanDao.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-}
+
+    }
+
     @Override
     public void update(Plan entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
@@ -115,7 +118,94 @@ public class PlanDao extends DBContext<Plan> {
 
     @Override
     public ArrayList<Plan> list() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ArrayList<Plan> plans = new ArrayList<>();
+        try {
+            String sql = "SELECT p.PlanID, p.PlanName, p.StartDate, p.EndDate, \n"
+                    + "       d.DepartmentID, d.DepartmentName,\n"
+                    + "       pc.PlanCampnID, pc.Quantity AS plannedQuantity,\n"
+                    + "       sc.ScID, sc.Date, sc.Shift, \n"
+                    + "       se.SchEmpID, a.Quantity AS actualQuantity\n"
+                    + "FROM [Plan] p\n"
+                    + "LEFT JOIN [Department] d ON p.DepartmentID = d.DepartmentID\n"
+                    + "LEFT JOIN [PlanCampain] pc ON p.PlanID = pc.PlanID\n"
+                    + "LEFT JOIN [SchedualCampaign] sc ON pc.PlanCampnID = sc.PlanCampnID\n"
+                    + "LEFT JOIN [SchedualEmployee] se ON sc.ScID = se.ScID\n"
+                    + "LEFT JOIN [Attendence] a ON se.SchEmpID = a.SchEmpID;";
+
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+
+            Plan currentPlan = null;
+            int totalProduced = 0;
+            int totalPlanned = 0;
+
+            while (rs.next()) {
+                int planID = rs.getInt("PlanID");
+                String planName = rs.getString("PlanName");
+                Date startDate = rs.getDate("StartDate");
+                Date endDate = rs.getDate("EndDate");
+                int departmentID = rs.getInt("DepartmentID");
+                String departmentName = rs.getString("DepartmentName");
+
+                // Tạo đối tượng mới nếu gặp Plan mới
+                if (currentPlan == null || currentPlan.getId() != planID) {
+                    if (currentPlan != null) {
+                        int remainingQuantity = totalPlanned - totalProduced;
+                        String status = calculateStatus(currentPlan.getEnd(), remainingQuantity);
+                        currentPlan.setTotalProduced(totalProduced);
+                        currentPlan.setRemainingQuantity(remainingQuantity);
+                        currentPlan.setStatus(status);
+                        plans.add(currentPlan);
+                    }
+
+                    // Khởi tạo đối tượng Plan mới
+                    Department dept = new Department(departmentID, departmentName);
+                    currentPlan = new Plan(planID, planName, startDate, endDate, dept, 0, 0, "");
+                    totalProduced = 0;
+                    totalPlanned = 0;
+                }
+
+                // Lấy dữ liệu từ PlanCampain và sản lượng thực tế
+                int campainID = rs.getInt("PlanCampnID");
+                int plannedQuantity = rs.getInt("plannedQuantity");
+                int actualQuantity = rs.getInt("actualQuantity");
+
+                PlanCampain campain = new PlanCampain();
+                campain.setId(campainID);
+                campain.setQuantity(plannedQuantity);
+
+                currentPlan.getCampains().add(campain);
+                totalProduced += actualQuantity;
+                totalPlanned += plannedQuantity;
+            }
+
+            // Xử lý plan cuối cùng
+            if (currentPlan != null) {
+                int remainingQuantity = totalPlanned - totalProduced;
+                String status = calculateStatus(currentPlan.getEnd(), remainingQuantity);
+                currentPlan.setTotalProduced(totalProduced);
+                currentPlan.setRemainingQuantity(remainingQuantity);
+                currentPlan.setStatus(status);
+                plans.add(currentPlan);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PlanDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return plans;
+    }
+
+    // Tính trạng thái dựa trên ngày kết thúc và số lượng còn lại
+    private String calculateStatus(Date endDate, int remainingQuantity) {
+        Date today = new Date(System.currentTimeMillis());
+        if (remainingQuantity == 0) {
+            return "completed";
+        } else if (endDate.before(today)) {
+            return "late";
+        } else {
+            return "on-going";
+        }
     }
 
     @Override
