@@ -62,15 +62,18 @@ public class UserDBContext extends DBContext {
         return roles;
     }
 
-    public User get(String username, String password) {
-    String sql = "SELECT UserName FROM [User] "
-            + "WHERE UserName = ? AND [password] = ?";
+    public User get(String username, String password,String roleName) {
+    String sql = "SELECT u.UserName, r.RoleName FROM [User] u "
+               + "INNER JOIN UserRole ur ON u.UserName = ur.UserName "
+               + "INNER JOIN Role r ON ur.RoleID = r.RoleID "
+               + "WHERE u.UserName = ? AND u.[password] = ? AND r.RoleName = ?";
     PreparedStatement stm = null;
     User user = null;
     try {
         stm = connection.prepareStatement(sql);
         stm.setString(1, username);
         stm.setString(2, password);
+        stm.setString(3, roleName);
         ResultSet rs = stm.executeQuery();
         if (rs.next()) {
             user = new User();

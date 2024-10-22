@@ -19,20 +19,18 @@ import java.io.IOException;
 public class LoginController extends HttpServlet {
 
     @Override
-protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String user = req.getParameter("username");
-    String pass = req.getParameter("password");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String user = req.getParameter("username");
+        String pass = req.getParameter("password");
+        String role = req.getParameter("role");
 
-    UserDBContext db = new UserDBContext();
-    User account = db.get(user, pass);
+        UserDBContext db = new UserDBContext();
+        User account = db.get(user, pass, role);  // Thêm tham số role để kiểm tra
 
-    if (account != null) {
-        req.getSession().setAttribute("account", account);
-
-        // Kiểm tra xem account có vai trò nào không
-        if (account.getRoles() != null && !account.getRoles().isEmpty()) {
-            String roleName = account.getRoles().get(0).getName();  // Lấy vai trò đầu tiên
-            switch (roleName) {
+        if (account != null) {
+            req.getSession().setAttribute("account", account);
+            // Điều hướng dựa trên vai trò của người dùng
+            switch (role) {
                 case "Human Resource Management":
                     resp.sendRedirect("employee/list");
                     break;
@@ -50,14 +48,12 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
                     break;
             }
         } else {
-            resp.sendError(403, "Tài khoản không có vai trò nào!");
+            req.getSession().setAttribute("err", "Username, password hoặc role không đúng!");
+            req.getSession().setAttribute("username", user);
+            req.getSession().setAttribute("role", role);
+            resp.sendRedirect("login");
         }
-    } else {
-        // Gán thông báo lỗi vào session
-        req.getSession().setAttribute("err", "Username hoặc password không đúng!");
-        resp.sendRedirect("login");
     }
-}
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -65,5 +61,4 @@ protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws S
         req.getRequestDispatcher("login.jsp").forward(req, resp);
         //post-processing
     }
-
 }
