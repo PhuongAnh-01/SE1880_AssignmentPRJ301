@@ -4,6 +4,7 @@
  */
 package model;
 
+import entity.accesscontrol.Role;
 import java.sql.*;
 
 /**
@@ -17,7 +18,7 @@ public class Employee {
     private boolean gender;
     private String address;
     private Date dob;
-    private String role;
+    private Role role;
     private String department;
     private Float salary;
     private Department dept;
@@ -25,7 +26,7 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(int id, String name, boolean gender, String address, Date dob, String role, String department, Float salary, Department dept) {
+    public Employee(int id, String name, boolean gender, String address, Date dob, Role role, String department, Float salary, Department dept) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -36,8 +37,6 @@ public class Employee {
         this.salary = salary;
         this.dept = dept;
     }
-
-    
 
     public int getId() {
         return id;
@@ -79,11 +78,11 @@ public class Employee {
         this.dob = dob;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -103,8 +102,6 @@ public class Employee {
         this.salary = salary;
     }
 
-    
-
     public Department getDept() {
         return dept;
     }
@@ -113,6 +110,7 @@ public class Employee {
         this.dept = dept;
     }
 
+    
     
 
 }

@@ -14,28 +14,26 @@
     </head>
     <body>
         <form action="update" method="POST">
-            Id: ${requestScope.e.id} <br/>
-            <input type="hidden" name="id" value="${requestScope.e.id}"/>
+            <input type="hidden" name="id" value="${requestScope.e.id}"/> <!-- Giữ ID để xác định nhân viên -->
+
             Name: <input type="text" name="name" value="${requestScope.e.name}"/> <br/>
-            Gender: <input type="radio" name="gender" value="male" 
-                           ${requestScope.e.gender?"checked=\"checked\"":""}
-                           /> Male
-            <input type="radio" name="gender" value="female"
-                   ${!requestScope.e.gender?"checked=\"checked\"":""}
-                   /> Female <br/>
-            Dob :<input type="date" name="dob" value="${requestScope.e.dob}" /> <br/>
+
+            Gender: 
+            <input type="radio" name="gender" value="male" ${requestScope.e.gender ? "checked=\"checked\"" : ""}/> Male
+            <input type="radio" name="gender" value="female" ${!requestScope.e.gender ? "checked=\"checked\"" : ""}/> Female <br/>
+
+            Dob: <input type="date" name="dob" value="${requestScope.e.dob}" /> <br/>
+
             Address: <input type="text" name="address" value="${requestScope.e.address}"/> <br/>
-            Department: <select name="did">
+
+            Department: 
+            <select name="did">
                 <c:forEach items="${requestScope.depts}" var="d">
-                    <option 
-                        ${requestScope.e.dept.id eq d.id?"selected=\"selected\"":""}
-                        value="${d.id}">${d.name}</option>
+                    <option ${requestScope.e.dept.id eq d.id ? "selected=\"selected\"" : ""} value="${d.id}">${d.name}</option>
                 </c:forEach>
             </select> <br/>
-            Salary: <input type="text" name="salary" value="${requestScope.e.salary}"/> <br/>
+
             <input type="submit" value="Save"/>
-            
-            
         </form>
     </body>
 </html>

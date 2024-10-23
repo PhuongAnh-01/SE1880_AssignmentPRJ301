@@ -73,7 +73,30 @@ public class DepartmentDao extends DBContext<Department> {
 
     @Override
     public ArrayList<Department> list() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ArrayList<Department> depts = new ArrayList<>();
+        PreparedStatement command = null;
+        try {
+            String sql = "SELECT DepartmentID, DepartmentName, type FROM Department";
+            command = connection.prepareStatement(sql);
+            ResultSet rs = command.executeQuery();
+            while (rs.next()) {
+                Department d = new Department();
+                d.setId(rs.getInt("DepartmentID"));
+                d.setName(rs.getString("DepartmentName"));
+                depts.add(d);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DepartmentDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally {
+            try {
+                command.close();
+                connection.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DepartmentDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return depts;
+
     }
 
 }

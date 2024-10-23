@@ -44,16 +44,16 @@ public class EmployeeUpdateController extends BaseRBACController {
 
     @Override
     protected void doAuthorizedPost(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
-        String raw_id = req.getParameter("id");
+        String raw_id = req.getParameter("id");  // Lấy EmployeeID từ form (chỉ để xác định nhân viên)
         String raw_name = req.getParameter("name");
         String raw_gender = req.getParameter("gender");
         String raw_dob = req.getParameter("dob");
         String raw_address = req.getParameter("address");
         String raw_did = req.getParameter("did");
 
-        //validate params
-        //object binding
+        // Object binding
         Employee e = new Employee();
+        e.setId(Integer.parseInt(raw_id));  // Sử dụng EmployeeID để xác định nhân viên, không cập nhật giá trị này
         e.setName(raw_name);
         e.setAddress(raw_address);
         e.setGender(raw_gender.equals("male"));
@@ -64,10 +64,10 @@ public class EmployeeUpdateController extends BaseRBACController {
         e.setDept(d);
 
         EmployeeDao db = new EmployeeDao();
-        db.update(e);
+        db.update(e);  // Gọi phương thức update để cập nhật thông tin nhân viên
 
-        //return results to user
-        resp.getWriter().println("Done");
+        // Chuyển hướng về danh sách nhân viên sau khi cập nhật thành công
+        resp.sendRedirect(req.getContextPath() + "/employee/list");
 
     }
 

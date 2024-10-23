@@ -7,6 +7,8 @@ package controller.employee;
 import controller.accesscontrol.BaseRBACController;
 import dal.DepartmentDao;
 import dal.EmployeeDao;
+import dal.RoleDao;
+import entity.accesscontrol.Role;
 import entity.accesscontrol.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,6 +22,7 @@ import java.sql.Date;
 import model.Department;
 import model.Employee;
 import java.sql.*;
+
 /**
  *
  * @author ADMIN
@@ -29,8 +32,13 @@ public class EmployeeCreateController extends BaseRBACController {
     @Override
     protected void doAuthorizedGet(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
         DepartmentDao db = new DepartmentDao();
-        ArrayList<Department> depts = db.list();
+        ArrayList<Department> depts = db.get("WS");
+
+        RoleDao rdb = new RoleDao();
+        ArrayList<Role> roles = rdb.getRolesLimited();
+
         req.setAttribute("depts", depts);
+        req.setAttribute("roles", roles);
         req.getRequestDispatcher("../view/employee/create.jsp").forward(req, resp);
 
     }
@@ -40,9 +48,9 @@ public class EmployeeCreateController extends BaseRBACController {
         String raw_name = req.getParameter("name");
         String raw_gender = req.getParameter("gender");
         String raw_dob = req.getParameter("dob");
-        String raw_address =req.getParameter("address");
+        String raw_address = req.getParameter("address");
         String raw_did = req.getParameter("did");
-
+        String raw_roleId = req.getParameter("roleId");
         //validate params
         //object binding
         Employee e = new Employee();
@@ -55,13 +63,15 @@ public class EmployeeCreateController extends BaseRBACController {
         d.setId(Integer.parseInt(raw_did));
         e.setDept(d);
 
-       
+        Role r = new Role();
+        r.setId(Integer.parseInt(raw_roleId));  // Gán RoleID vào đối tượng Employee
+        e.setRole(r);
 
         EmployeeDao db = new EmployeeDao();
         db.insert(e);
 
         //return results to user
-        resp.getWriter().println("Inserted " + e.getId());
+        resp.sendRedirect(req.getContextPath() + "/employee/list");
 
     }
 

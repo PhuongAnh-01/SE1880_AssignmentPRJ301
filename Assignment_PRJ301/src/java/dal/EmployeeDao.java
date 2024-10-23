@@ -4,11 +4,13 @@
  */
 package dal;
 
+import entity.accesscontrol.Role;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Department;
 import model.Employee;
 
 /**
@@ -17,11 +19,108 @@ import model.Employee;
  */
 public class EmployeeDao extends DBContext<Employee> {
 
+    public ArrayList<Employee> search(Integer id, String name, Boolean gender, String address, Date from, Date to, Integer did, Integer roleId) {
+        String sql = "SELECT \n"
+                + "    e.EmployeeID, \n"
+                + "    e.EmployeeName, \n"
+                + "    e.gender, \n"
+                + "    e.address, \n"
+                + "    e.dob, \n"
+                + "    d.DepartmentID, \n"
+                + "    d.DepartmentName, \n"
+                + "    r.RoleName \n"
+                + "FROM \n"
+                + "    Employee e \n"
+                + "INNER JOIN \n"
+                + "    Department d ON e.DepartmentID = d.DepartmentID \n"
+                + "INNER JOIN \n"
+                + "    Role r ON e.RoleID = r.RoleID \n"
+                + "	WHERE \n"
+                + "    1 = 1";
+        ArrayList<Employee> emps = new ArrayList<>();
+        ArrayList<Object> paramValues = new ArrayList<>();
+        if (id != null) {
+            sql += " AND e.EmployeeID = ?";
+            paramValues.add(id);
+        }
+        if (name != null) {
+            sql += " AND e.EmployeeName LIKE '%' + ? + '%'";
+            paramValues.add(name);
+        }
+        if (gender != null) {
+            sql += " AND e.gender = ?";
+            paramValues.add(gender);
+        }
+        if (address != null) {
+            sql += " AND e.[address] LIKE '%' + ? + '%'";
+            paramValues.add(address);
+        }
+        if (id != null) {
+            sql += " AND e.EmployeeID = ?";
+            paramValues.add(id);
+        }
+        if (from != null) {
+            sql += " AND e.dob >= ?";
+            paramValues.add(from);
+        }
+        if (to != null) {
+            sql += " AND e.dob = ?";
+            paramValues.add(to);
+        }
+        if (did != null) {
+            sql += " AND d.DepartmentID  = ?";
+            paramValues.add(did);
+        }
+        if (roleId != null) {
+            sql += " AND r.RoleID  = ?";
+            paramValues.add(roleId);
+        }
+
+        PreparedStatement stm = null;
+        try {
+            stm = connection.prepareStatement(sql);
+            for (int i = 0; i < paramValues.size(); i++) {
+                stm.setObject((i + 1), paramValues.get(i));
+            }
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Employee e = new Employee();
+                e.setId(rs.getInt("EmployeeID"));
+                e.setName(rs.getString("EmployeeName"));
+                e.setGender(rs.getBoolean("gender"));
+                e.setDob(rs.getDate("dob"));
+                e.setAddress(rs.getString("address"));
+
+                Department d = new Department();
+                d.setId(rs.getInt("DepartmentID"));
+                d.setName(rs.getString("DepartmentName"));
+                e.setDept(d);
+
+                Role r = new Role();
+                r.setName(rs.getString("RoleName"));  // Lấy Role Name từ ResultSet
+                e.setRole(r);
+
+                emps.add(e);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            try {
+                stm.close();
+                connection.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(EmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return  emps;
+    }
+
     @Override
     public void insert(Employee entity) {
         String sql_insert = "INSERT INTO [dbo].[Employee] "
-                + "([EmployeeName], [gender], [address], [dob], [DepartmentID]) "
-                + "VALUES (?, ?, ?, ?, ?)"; // Added closing parenthesis here
+                + "([EmployeeName], [gender], [address], [dob], [DepartmentID], [RoleID]) " // Thêm RoleID vào câu lệnh
+                + "VALUES (?, ?, ?, ?, ?, ?)"; // Added closing parenthesis here
 
         String sql_select = "SELECT @@IDENTITY as EmployeeID";
 
@@ -36,6 +135,7 @@ public class EmployeeDao extends DBContext<Employee> {
             stm_insert.setString(3, entity.getAddress());
             stm_insert.setDate(4, entity.getDob());
             stm_insert.setInt(5, entity.getDept().getId());
+            stm_insert.setInt(6, entity.getRole().getId());
             stm_insert.executeUpdate();
 
             // Select the last inserted EmployeeID
@@ -73,13 +173,13 @@ public class EmployeeDao extends DBContext<Employee> {
     @Override
     public void update(Employee entity) {
         String sql_update = "UPDATE [dbo].[Employee]\n"
-                + "   SET [EmployeeName] = ?\n"
-                + "      ,[gender] = ?\n"
-                + "      ,[address] = ?\n"
-                + "      ,[dob] = ?\n"
-                + "      ,[DepartmentID] = ?\n"
-                + "      ,[salary] = ?\n"
-                + " WHERE EmployeeID = ?";
+                + "   SET [EmployeeName] = ?,\n"
+                + "      [gender] = ?,\n"
+                + "      [address] = ?,\n"
+                + "      [dob] = ?,\n"
+                + "      [DepartmentID] = ?\n"
+                + " WHERE [EmployeeID] = ?";  // Sử dụng EmployeeID để xác định nhân viên
+
         PreparedStatement stm_update = null;
         try {
             stm_update = connection.prepareStatement(sql_update);
@@ -88,12 +188,12 @@ public class EmployeeDao extends DBContext<Employee> {
             stm_update.setString(3, entity.getAddress());
             stm_update.setDate(4, entity.getDob());
             stm_update.setInt(5, entity.getDept().getId());
-            stm_update.setDouble(6, entity.getSalary());
+            stm_update.setInt(6, entity.getId());  // Chỉ sử dụng EmployeeID để xác định nhân viên
             stm_update.executeUpdate();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(EmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
-        }finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException ex) {
@@ -110,10 +210,10 @@ public class EmployeeDao extends DBContext<Employee> {
     @Override
     public ArrayList<Employee> list() {
         ArrayList<Employee> list = new ArrayList<>();
-        String sql = "SELECT e.EmployeeID, e.EmployeeName, e.gender, e.address, e.dob, r.RoleName, d.DepartmentName FROM \n"
-                + "EMPLOYEE e JOIN dbo.Role r \n"
-                + "ON r.RoleID = e.RoleID JOIN dbo.Department d\n"
-                + "ON d.DepartmentID = e.DepartmentID";
+        String sql = "SELECT e.EmployeeID, e.EmployeeName, e.gender, e.address, e.dob, d.DepartmentName, r.RoleName "
+                + "FROM EMPLOYEE e "
+                + "JOIN dbo.Department d ON d.DepartmentID = e.DepartmentID "
+                + "JOIN dbo.Role r ON r.RoleID = e.RoleID";
 
         try {
             PreparedStatement st = connection.prepareStatement(sql);
@@ -121,13 +221,15 @@ public class EmployeeDao extends DBContext<Employee> {
             while (rs.next()) {
                 Employee e = new Employee();
                 e.setId(rs.getInt("EmployeeID"));
-                e.setName(rs.getNString("EmployeeName"));
+                e.setName(rs.getString("EmployeeName"));
                 e.setGender(rs.getBoolean("gender"));
-
                 e.setAddress(rs.getString("address"));
                 e.setDob(rs.getDate("dob"));
-                e.setRole(rs.getString("RoleName"));
-                e.setDepartment(rs.getString("DepartmentName"));
+                e.setDepartment(rs.getString("DepartmentName"));  // Chỉ lấy Department
+
+                Role role = new Role();
+                role.setName(rs.getString("RoleName"));
+                e.setRole(role);
                 list.add(e);
             }
 
@@ -136,12 +238,55 @@ public class EmployeeDao extends DBContext<Employee> {
         }
 
         return list;
-
     }
 
     @Override
     public Employee get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "SELECT e.EmployeeID, e.EmployeeName, e.gender, e.address, e.dob, d.DepartmentID, d.DepartmentName "
+                + "FROM EMPLOYEE e "
+                + "JOIN dbo.Department d ON d.DepartmentID = e.DepartmentID "
+                + "WHERE e.EmployeeID = ?";
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        Employee e = null;
+
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);  // Truyền EmployeeID vào câu lệnh SQL
+            rs = stm.executeQuery();
+
+            if (rs.next()) {
+                e = new Employee();
+                e.setId(rs.getInt("EmployeeID"));
+                e.setName(rs.getString("EmployeeName"));
+                e.setGender(rs.getBoolean("gender"));
+                e.setAddress(rs.getString("address"));
+                e.setDob(rs.getDate("dob"));
+
+                Department d = new Department();
+                d.setId(rs.getInt("DepartmentID"));
+                d.setName(rs.getString("DepartmentName"));
+                e.setDept(d);  // Gán Department cho Employee
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+                connection.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(EmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return e;
+
     }
 
 }

@@ -19,11 +19,16 @@
             <input type="radio" name="gender" value="female"/> Female <br/>
             Dob :<input type="date" name="dob" /> <br/>
             Address: <input type="text" name="address"/> <br/>
+            Role: <select name="roleId">
+                <c:forEach items="${requestScope.roles}" var="r">
+                    <option value="${r.id}">${r.name}</option>
+                </c:forEach>
+            </select> <br/>
             Department: <select name="did">
-            <c:forEach items="${requestScope.depts}" var="d">
-                <option value="${d.id}">${d.name}</option>
-            </c:forEach>
-            
+                <c:forEach items="${requestScope.depts}" var="d">
+                    <option value="${d.id}">${d.name}</option>
+                </c:forEach>
+
             </select> <br/>
             <input type="submit" value="Save"/>
         </form>

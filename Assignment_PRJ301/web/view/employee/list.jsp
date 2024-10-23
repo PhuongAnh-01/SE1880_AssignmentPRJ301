@@ -12,9 +12,15 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Employee List</title>
     </head>
     <body>
+        <!-- Nút Create Employee -->
+        <form action="create" method="GET">
+            <input type="submit" value="Create New Employee" />
+        </form>
+        
+        <!-- Bảng danh sách nhân viên -->
         <table border="1px">
             <tr>
                 <th>Employee ID</th>
@@ -22,9 +28,8 @@
                 <th>Gender</th>
                 <th>Address</th>
                 <th>Dob</th>
-                <th>Role Name</th>
-                <th>Department Name</th>
-
+                <th>Role Name</th> 
+                <th>Department Name</th>  <!-- Bỏ Role Name -->
             </tr>
             <c:forEach items="${emps}" var="e">
                 <tr>
@@ -42,14 +47,11 @@
                     </td>
                     <td>${e.address}</td>
                     <td>${e.dob}</td>
-                    <td>${e.role}</td>
-                    <td>${e.department}</td>
-                    <td><a href="update?id=${e.id}">Edit</a>
+                    <td>${e.role.name}</td> 
+                    <td>${e.department}</td>  
+                    <td><a href="update?id=${e.id}">Edit</a></td>
                 </tr>
             </c:forEach>
         </table>
-
-
-
     </body>
 </html>
