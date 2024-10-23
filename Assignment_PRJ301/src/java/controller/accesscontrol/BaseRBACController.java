@@ -14,10 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-/**
- *
- * @author sonnt-local
- */
 public abstract class BaseRBACController extends BaseRequiredAuthenticationController {
     
     private boolean isAuthorized(HttpServletRequest req,User account)

@@ -25,9 +25,10 @@
                    ${param.gender eq null or param.gender eq "both"?"checked=\"checked\"":""}
                    value="both"/> Both
             <br/>
+            Address <input type="text" name="address" value="${param.address}"/> <br/>
             Dob - From: <input type="date" name="from" value="${param.from}"/> 
             - To: <input type="date" name="to" value="${param.to}"/> <br/>
-            Address <input type="text" name="address" value="${param.address}"/> <br/>
+            
             Role: <select name="roleId">
                 <option value="-1">----------ALL------------</option>
                 <c:forEach items="${requestScope.roles}" var="r">
