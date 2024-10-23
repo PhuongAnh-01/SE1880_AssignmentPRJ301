@@ -56,6 +56,7 @@ public class EmployeeFilterController extends HttpServlet {
         
         ArrayList<Department> depts = dbDept.list();
         request.setAttribute("depts", depts);
+        
         ArrayList<Role> roles = dbRole.list();
         request.setAttribute("roles", roles);
         request.getRequestDispatcher("../view/employee/filter.jsp").forward(request, response);

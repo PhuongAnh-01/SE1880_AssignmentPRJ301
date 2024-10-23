@@ -55,10 +55,7 @@ public class EmployeeDao extends DBContext<Employee> {
             sql += " AND e.[address] LIKE '%' + ? + '%'";
             paramValues.add(address);
         }
-        if (id != null) {
-            sql += " AND e.EmployeeID = ?";
-            paramValues.add(id);
-        }
+
         if (from != null) {
             sql += " AND e.dob >= ?";
             paramValues.add(from);
@@ -67,11 +64,11 @@ public class EmployeeDao extends DBContext<Employee> {
             sql += " AND e.dob = ?";
             paramValues.add(to);
         }
-        if (did != null) {
+        if (did != null && did != -1) {
             sql += " AND d.DepartmentID  = ?";
             paramValues.add(did);
         }
-        if (roleId != null) {
+        if (roleId != null && roleId != -1) {
             sql += " AND r.RoleID  = ?";
             paramValues.add(roleId);
         }
@@ -104,8 +101,7 @@ public class EmployeeDao extends DBContext<Employee> {
             }
         } catch (SQLException ex) {
             Logger.getLogger(EmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        finally {
+        } finally {
             try {
                 stm.close();
                 connection.close();
@@ -113,7 +109,7 @@ public class EmployeeDao extends DBContext<Employee> {
                 Logger.getLogger(EmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return  emps;
+        return emps;
     }
 
     @Override
@@ -204,7 +200,26 @@ public class EmployeeDao extends DBContext<Employee> {
 
     @Override
     public void delete(Employee entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql_delete = "DELETE FROM [dbo].[Employee]\n"
+                + "      WHERE EmployeeID = ?";
+        
+        PreparedStatement stm_delete = null;
+        try {
+            stm_delete = connection.prepareStatement(sql_delete);
+            stm_delete.setInt(1, entity.getId());
+            stm_delete.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(EmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+
+
     }
 
     @Override

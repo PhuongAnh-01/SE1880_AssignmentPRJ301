@@ -68,7 +68,7 @@ public class RoleDao extends DBContext<Role> {
         PreparedStatement command = null;
         
         try {
-            String sql = "select RoleID, RoleName from role";
+            String sql = "select RoleID, RoleName from Role";
             command = connection.prepareStatement(sql);
             ResultSet rs = command.executeQuery();
             while(rs.next()) {
