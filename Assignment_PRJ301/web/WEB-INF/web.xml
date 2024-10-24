@@ -36,6 +36,14 @@
         <servlet-name>EmployeeDeleteController</servlet-name>
         <servlet-class>controller.employee.EmployeeDeleteController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SchedualCampainCreateController</servlet-name>
+        <servlet-class>controller.schedualcampain.SchedualCampainCreateController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SchedualCampainListController</servlet-name>
+        <servlet-class>controller.schedualcampain.SchedualCampainListController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -71,6 +79,14 @@
     <servlet-mapping>
         <servlet-name>EmployeeDeleteController</servlet-name>
         <url-pattern>/employee/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SchedualCampainCreateController</servlet-name>
+        <url-pattern>/schedualcampain/create</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SchedualCampainListController</servlet-name>
+        <url-pattern>/schedualcampain/list</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>25</session-timeout>

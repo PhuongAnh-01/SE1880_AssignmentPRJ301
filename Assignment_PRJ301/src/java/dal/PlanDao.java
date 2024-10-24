@@ -108,7 +108,9 @@ public class PlanDao extends DBContext<Plan> {
 
     @Override
     public void update(Plan entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+
+
     }
 
     @Override

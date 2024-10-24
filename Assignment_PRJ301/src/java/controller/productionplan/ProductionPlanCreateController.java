@@ -4,9 +4,11 @@
  */
 package controller.productionplan;
 
+import controller.accesscontrol.BaseRBACController;
 import dal.DepartmentDao;
 import dal.PlanDao;
 import dal.ProductDao;
+import entity.accesscontrol.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -23,34 +25,32 @@ import model.Product;
  *
  * @author ADMIN
  */
-public class ProductionPlanCreateController extends HttpServlet {
+public class ProductionPlanCreateController extends BaseRBACController {
+
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doAuthorizedGet(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
         ProductDao dbProduct = new ProductDao();
         DepartmentDao dbDepts = new DepartmentDao();
 
-        request.setAttribute("products", dbProduct.list());
-        request.setAttribute("depts", dbDepts.get("WS"));
+        req.setAttribute("products", dbProduct.list());
+        req.setAttribute("depts", dbDepts.get("WS"));
         // -> 2 list trog request scope
-        request.getRequestDispatcher("../productionplan/create.jsp").forward(request, response);
-
+        req.getRequestDispatcher("../productionplan/create.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doAuthorizedPost(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
         Plan plan = new Plan();
-        plan.setName(request.getParameter("name")); // jsp
-        plan.setStart(Date.valueOf(request.getParameter("from")));
-        plan.setEnd(Date.valueOf(request.getParameter("to")));
+        plan.setName(req.getParameter("name")); // jsp
+        plan.setStart(Date.valueOf(req.getParameter("from")));
+        plan.setEnd(Date.valueOf(req.getParameter("to")));
 
         Department d = new Department();
-        d.setId(Integer.parseInt(request.getParameter("did")));
+        d.setId(Integer.parseInt(req.getParameter("did")));
         plan.setDept(d);
 
-        String[] pids = request.getParameterValues("pid");
+        String[] pids = req.getParameterValues("pid");
         for (String pid : pids) { // qua tung obj trong product 
             PlanCampain c = new PlanCampain();
 
@@ -59,8 +59,8 @@ public class ProductionPlanCreateController extends HttpServlet {
             c.setProduct(p);
             c.setPlan(plan);
 
-            String raw_quantity = request.getParameter("quantity" + pid);
-            String raw_cost = request.getParameter("cost" + pid);
+            String raw_quantity = req.getParameter("quantity" + pid);
+            String raw_cost = req.getParameter("cost" + pid);
 
             c.setQuantity(raw_quantity != null && raw_quantity.length() > 0 ? Integer.parseInt(raw_quantity) : 0);
             // khong nhap thi tra ve 0
@@ -74,21 +74,10 @@ public class ProductionPlanCreateController extends HttpServlet {
         if (plan.getCampains().size() > 0) { // neu plan ma 
             PlanDao db = new PlanDao();
             db.insert(plan);
-            response.getWriter().println("your plan has been added!");
+            resp.getWriter().println("your plan has been added!");
         } else {
-            response.getWriter().println("your plan dose not product/campain");
+            resp.getWriter().println("your plan dose not product/campain");
         }
-
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

@@ -4,7 +4,9 @@
  */
 package controller.productionplan;
 
+import controller.accesscontrol.BaseRBACController;
 import dal.PlanDao;
+import entity.accesscontrol.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -18,55 +20,22 @@ import model.Plan;
  *
  * @author ADMIN
  */
-public class ProductionPlanListController extends HttpServlet {
+public class ProductionPlanListController extends BaseRBACController {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProductionPlanListController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProductionPlanListController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doAuthorizedGet(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
         PlanDao planDao = new PlanDao();
         List<Plan> plans = planDao.list();  // Lấy danh sách các plan đã bao gồm thông tin tổng hợp
 
         // Gửi dữ liệu tới JSP để hiển thị
-        request.setAttribute("plans", plans);
-        request.getRequestDispatcher("../productionplan/list.jsp").forward(request, response);
-
+        req.setAttribute("plans", plans);
+        req.getRequestDispatcher("../productionplan/list.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doAuthorizedPost(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

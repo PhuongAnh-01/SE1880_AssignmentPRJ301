@@ -35,7 +35,7 @@ public class LoginController extends HttpServlet {
                     resp.sendRedirect("employee/list");
                     break;
                 case "Workshop Manager":
-                    resp.sendRedirect("manager/assign_tasks");
+                    resp.sendRedirect("schedualcampain/list");
                     break;
                 case "Produce Planner":
                     resp.sendRedirect("productionplan/list");
