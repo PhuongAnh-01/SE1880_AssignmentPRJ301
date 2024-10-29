@@ -9,8 +9,10 @@ package model;
  * @author ADMIN
  */
 public class Product {
+
     private int id;
     private String name;
+    private int departmentId;
 
     public Product() {
     }
@@ -19,6 +21,16 @@ public class Product {
         this.id = id;
         this.name = name;
     }
+
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -35,7 +47,5 @@ public class Product {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
-    
+
 }

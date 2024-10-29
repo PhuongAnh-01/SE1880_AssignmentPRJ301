@@ -27,11 +27,11 @@ public class SchedualCampainCreateController extends BaseRBACController {
 
     @Override
     protected void doAuthorizedGet(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
-//        int planID = Integer.parseInt(req.getParameter("PlanID"));
-//        SchedualCampaignDao scheduleDao = new SchedualCampaignDao();
-//        List<SchedualCampaign> schedules = scheduleDao.listPlanCamp(planID);
-//
-//        req.setAttribute("schedules", schedules);
+        int planID = Integer.parseInt(req.getParameter("PlanID"));
+        SchedualCampaignDao scheduleDao = new SchedualCampaignDao();
+        List<SchedualCampaign> schedules = scheduleDao.listPlanCamp(planID);
+
+        req.setAttribute("schedules", schedules);
         req.getRequestDispatcher("../schedualcampain/create.jsp").forward(req, resp);
     }
 

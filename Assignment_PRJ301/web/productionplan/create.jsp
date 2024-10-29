@@ -45,23 +45,31 @@
         <!-- Form tạo Plan -->
         <div class="form-container">
             <h2 class="text-center mb-4">Create New Plan</h2>
+            <c:if test="${not empty message}">
+    <div class="alert alert-danger text-center" role="alert">
+        ${message}
+    </div>
+</c:if>
             <form action="create" method="POST">
 
                 <!-- Tên kế hoạch -->
                 <div class="mb-3">
                     <label for="name" class="form-label">Plan Title</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter plan title" required/>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter plan title" required
+                           value="${plan.name}"  />
                 </div>
 
                 <!-- Thời gian -->
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="from" class="form-label">From</label>
-                        <input type="date" class="form-control" id="from" name="from" required/>
+                        <input type="date" class="form-control" id="from" name="from" required
+                               value="${plan.start}" />
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="to" class="form-label">To</label>
-                        <input type="date" class="form-control" id="to" name="to" required/>
+                        <input type="date" class="form-control" id="to" name="to" required
+                               value="${plan.end}" />
                     </div>
                 </div>
 

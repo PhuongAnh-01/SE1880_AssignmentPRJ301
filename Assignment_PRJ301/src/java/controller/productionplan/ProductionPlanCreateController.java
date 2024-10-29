@@ -27,7 +27,6 @@ import model.Product;
  */
 public class ProductionPlanCreateController extends BaseRBACController {
 
-
     @Override
     protected void doAuthorizedGet(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
         ProductDao dbProduct = new ProductDao();
@@ -45,11 +44,12 @@ public class ProductionPlanCreateController extends BaseRBACController {
         plan.setName(req.getParameter("name")); // jsp
         plan.setStart(Date.valueOf(req.getParameter("from")));
         plan.setEnd(Date.valueOf(req.getParameter("to")));
-
+        
         Department d = new Department();
         d.setId(Integer.parseInt(req.getParameter("did")));
         plan.setDept(d);
-
+        
+       
         String[] pids = req.getParameterValues("pid");
         for (String pid : pids) { // qua tung obj trong product 
             PlanCampain c = new PlanCampain();
@@ -71,13 +71,21 @@ public class ProductionPlanCreateController extends BaseRBACController {
                 plan.getCampains().add(c);
             }
         }
+        ProductDao dbProduct = new ProductDao();
+        DepartmentDao dbDepts = new DepartmentDao();
         if (plan.getCampains().size() > 0) { // neu plan ma 
             PlanDao db = new PlanDao();
             db.insert(plan);
-            resp.getWriter().println("your plan has been added!");
+            resp.sendRedirect("list");
         } else {
-            resp.getWriter().println("your plan dose not product/campain");
+            
+            req.setAttribute("plan", plan);
+            req.setAttribute("products", dbProduct.list());
+            req.setAttribute("depts", dbDepts.get("WS"));
+            req.setAttribute("message", "Your plan does not have any products or campaigns!");
+            req.getRequestDispatcher("../productionplan/create.jsp").forward(req, resp);
         }
+
     }
 
 }
