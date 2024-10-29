@@ -108,8 +108,6 @@ public class PlanDao extends DBContext<Plan> {
 
     @Override
     public void update(Plan entity) {
-        
-
 
     }
 
@@ -211,7 +209,37 @@ public class PlanDao extends DBContext<Plan> {
     }
 
     @Override
-    public Plan get(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Plan get(int planID) {
+        Plan plan = null;
+
+        PreparedStatement stm;
+        try {
+            String sql = "SELECT p.PlanID, p.PlanName, p.StartDate, p.EndDate, \n"
+                    + "                    d.DepartmentID, d.DepartmentName \n"
+                    + "                    FROM dbo.[Plan] p \n"
+                    + "                     JOIN Department d ON p.DepartmentID = d.DepartmentID \n"
+                    + "                     WHERE p.PlanID = ?";
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, planID);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()){
+                int departmentID = rs.getInt("DepartmentID"); //sql
+                String departmentName = rs.getString("DepartmentName");
+                
+                
+                Department dept = new Department(departmentID, departmentName);
+                plan = new Plan();
+                plan.setId(planID);
+                plan.setName(rs.getString("PlanName"));
+                plan.setStart(rs.getDate("StartDate"));
+                plan.setEnd(rs.getDate("EndDate"));
+                plan.setDept(dept);
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PlanDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return plan;
+
     }
 }
