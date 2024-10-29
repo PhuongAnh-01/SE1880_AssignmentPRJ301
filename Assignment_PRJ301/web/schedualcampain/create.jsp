@@ -47,7 +47,7 @@
                                     <td>${shift}</td>
                                     <td>${quantityPerShift}</td>
                                 </tr>
-                            </c:forEach>
+                                </c:forEach>
                         </c:forEach>
                     </tbody>
                 </c:when>

@@ -27,6 +27,7 @@ import model.PlanCampain;
  *
  * @author ADMIN
  */
+
 public class SchedualCampainCreateController extends BaseRBACController {
 
     private List<Date> generateDateRange(Date start, Date end) {
@@ -43,7 +44,7 @@ public class SchedualCampainCreateController extends BaseRBACController {
 
     @Override
     protected void doAuthorizedGet(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
-        String planIDStr = req.getParameter("PlanID");
+        String planIDStr = req.getParameter("planID");
         if (planIDStr == null || planIDStr.isEmpty()) {
             // Nếu không có PlanID, chuyển hướng đến trang lỗi hoặc trả về thông báo lỗi
             req.setAttribute("error", "PlanID is missing");
