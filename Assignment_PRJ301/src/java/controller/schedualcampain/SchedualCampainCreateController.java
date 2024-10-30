@@ -52,7 +52,7 @@ public class SchedualCampainCreateController extends BaseRBACController {
             return;
         }
 
-        // Thử chuyển đổi PlanID thành số nguyên
+        // chuyển đổi PlanID thành số nguyên
         int planID;
         try {
             planID = Integer.parseInt(planIDStr);
@@ -121,6 +121,7 @@ public class SchedualCampainCreateController extends BaseRBACController {
         scheduleDao.insert(schedule);
 
         // Redirect về danh sách lịch
+        req.setAttribute("successMessage", "Lịch làm việc đã được tạo thành công!");
         resp.sendRedirect("schedual_campaign_list?planCampnID=" + planCampnID);
     }
 

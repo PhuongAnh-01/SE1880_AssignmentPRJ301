@@ -4,10 +4,12 @@
  */
 package controller.employee;
 
+import controller.accesscontrol.BaseRBACController;
 import dal.DepartmentDao;
 import dal.EmployeeDao;
 import dal.RoleDao;
 import entity.accesscontrol.Role;
+import entity.accesscontrol.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -23,7 +25,7 @@ import model.Employee;
  *
  * @author ADMIN
  */
-public class EmployeeFilterController extends HttpServlet {
+public class EmployeeFilterController extends BaseRBACController {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -46,37 +48,37 @@ public class EmployeeFilterController extends HttpServlet {
         Date from = (raw_from != null && !raw_from.isBlank()) ? Date.valueOf(raw_from) : null;
         Date to = (raw_to != null && !raw_to.isBlank()) ? Date.valueOf(raw_to) : null;
         Integer roleId = (raw_roleId != null && !raw_roleId.equals("-1")) ? Integer.parseInt(raw_roleId) : null;
-        Integer did = (raw_did != null && !raw_did.equals(-1))?Integer.parseInt(raw_did): null;
-        
+        Integer did = (raw_did != null && !raw_did.equals(-1)) ? Integer.parseInt(raw_did) : null;
+
         EmployeeDao dbEmp = new EmployeeDao();
         DepartmentDao dbDept = new DepartmentDao();
         RoleDao dbRole = new RoleDao();
         ArrayList<Employee> emps = dbEmp.search(id, name, gender, address, from, to, did, roleId);
         request.setAttribute("emps", emps);
-        
+
         ArrayList<Department> depts = dbDept.list();
         request.setAttribute("depts", depts);
-        
+
         ArrayList<Role> roles = dbRole.list();
         request.setAttribute("roles", roles);
         request.getRequestDispatcher("../view/employee/filter.jsp").forward(request, response);
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+   
 
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    @Override
+    protected void doAuthorizedGet(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
+        processRequest(req, resp);
+    }
+
+    @Override
+    protected void doAuthorizedPost(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
+        processRequest(req, resp);
+    }
 
 }

@@ -34,7 +34,7 @@
                 <tr>
                     <th>Ngày</th>
                     <th>Ca</th>
-                    <th>Sản xuất thùng</th> <!-- Column for product quantity -->
+                    <th>${plan.name}</th> <!-- Column for product quantity -->
                 </tr>
             </thead>
             <c:choose>
@@ -45,7 +45,9 @@
                                 <tr>
                                     <td><fmt:formatDate value="${date}" pattern="dd/MM/yyyy" /></td>
                                     <td>${shift}</td>
-                                    <td>${quantityPerShift}</td>
+                                     <td>
+                                        <input type="number" name="quantity" required class="form-control" placeholder="Nhập số lượng"/>
+                                    </td>
                                 </tr>
                                 </c:forEach>
                         </c:forEach>
@@ -58,6 +60,12 @@
                 </c:otherwise>
             </c:choose>
         </table>
+                <button type="submit" class="btn btn-primary">Lưu</button> <!-- Save button -->
+    </form>
+
+    <c:if test="${not empty successMessage}">
+        <div class="alert alert-success mt-3">${successMessage}</div>
+    </c:if>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

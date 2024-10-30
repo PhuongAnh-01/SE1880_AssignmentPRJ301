@@ -29,25 +29,21 @@
                     <th>Start Date</th>
                     <th>End Date</th>
                     <th>Department</th>
-                    <th>Tổng Sản Lượng Đã Sản Xuất</th>
-                    <th>Số Lượng Còn Lại</th>
-                    <th>Trạng Thái</th>
-                    <th>Hành động</th>
+                    
+                    <th>Số Lượng Cần thực Hiện</th>
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="plan" items="${plans}">
+                <c:forEach var="p" items="${plans}">
                     <tr>
-                        <td>${plan.id}</td>
-                        <td>${plan.name}</td>
-                        <td>${plan.start}</td>
-                        <td>${plan.end}</td>
-                        <td>${plan.dept.name}</td>
-                        <td>${plan.totalProduced}</td>
-                        <td>${plan.remainingQuantity}</td>
-                        <td>${plan.status}</td>
+                        <td>${p.id}</td>
+                        <td>${p.plan.name}</td>
+                        <td>${p.plan.start}</td>
+                        <td>${p.plan.end}</td>
+                        <td>${p.plan.dept.name}</td>
+                        <td>${p.quantity}</td>
                         <td>
-                            <a href="create?planID=${plan.id}" class="btn btn-primary">Tạo Lịch</a>
+                            <a href="../schedualcampain/create?planID=${p.id}" class="btn btn-primary">Tạo Lịch</a>
                         </td>
                     </tr>
                 </c:forEach>

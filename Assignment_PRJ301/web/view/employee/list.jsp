@@ -32,6 +32,9 @@
                 <form action="create" method="GET">
                     <button type="submit" class="btn btn-success">Create New Employee</button>
                 </form>
+                <form action="filter" method="GET" style="display: inline;">
+                <button type="submit" class="btn btn-info">Filter Employee</button>
+            </form>
             </div>
             <table class="table table-striped table-bordered">
                 <thead>

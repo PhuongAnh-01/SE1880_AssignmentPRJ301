@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Department;
 import model.Plan;
 import model.PlanCampain;
 import model.Product;
@@ -28,17 +29,16 @@ public class PlanCampainDao extends DBContext<PlanCampain> {
             stm.setInt(2, campain.getProduct().getId());
             stm.setInt(3, campain.getQuantity());
             stm.setFloat(4, campain.getCost());
-            
+
             stm.executeUpdate();
-            
+
             ResultSet rs = stm.getGeneratedKeys();
-            if(rs.next()) {
+            if (rs.next()) {
                 campain.setId(rs.getInt("PlanCampnID"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(PlanCampainDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
 
     }
 
@@ -54,9 +54,59 @@ public class PlanCampainDao extends DBContext<PlanCampain> {
 
     @Override
     public ArrayList<PlanCampain> list() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ArrayList<PlanCampain> plans = new ArrayList<>();
+        PreparedStatement command = null;
+        try {
+            String sql = "select p.planID, pc.PlanCampnID, p.PlanName,d.DepartmentName, p.StartDate, p.EndDate,pd.ProductName\n"
+                    + ", pc.Quantity from [Plan] p\n"
+                    + "                    inner join [PlanCampain] pc on p.PlanID = pc.PlanID\n"
+                    + "                    inner join [Product] pd on pc.ProductID = pd.ProductID\n"
+                    + "                   inner join [Department] d on p.DepartmentID = d.DepartmentID";
+
+            command = connection.prepareStatement(sql);
+            ResultSet rs = command.executeQuery();
+
+            while (rs.next()) {
+                PlanCampain pc = new PlanCampain();
+                pc.setId(rs.getInt("PlanCampnID"));
+                pc.setQuantity(rs.getInt("Quantity"));
+
+                Plan p = new Plan();
+                p.setId(rs.getInt("planID"));
+                p.setName(rs.getNString("PlanName"));
+                p.setStart(rs.getDate("StartDate"));
+                p.setEnd(rs.getDate("EndDate"));
+
+                Department d = new Department();
+                d.setName(rs.getString("DepartmentName"));
+                p.setDept(d);
+
+                Product pd = new Product();
+                pd.setName(rs.getNString("ProductName"));
+                pc.setProduct(pd);
+
+                pc.setPlan(p);
+                plans.add(pc);
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PlanCampainDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return plans;
     }
 
+    public void deleteByPlanID(int planID) {
+        String sql_delete_campains = "DELETE FROM PlanCampain WHERE PlanID = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql_delete_campains);
+            stm.setInt(1, planID);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(PlanCampainDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     @Override
     public PlanCampain get(int planCampnID) {
         PlanCampain campain = null;

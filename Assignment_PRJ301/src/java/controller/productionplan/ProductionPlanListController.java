@@ -5,6 +5,7 @@
 package controller.productionplan;
 
 import controller.accesscontrol.BaseRBACController;
+import dal.PlanCampainDao;
 import dal.PlanDao;
 import entity.accesscontrol.User;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Plan;
+import model.PlanCampain;
 
 /**
  *
@@ -25,8 +27,8 @@ public class ProductionPlanListController extends BaseRBACController {
 
     @Override
     protected void doAuthorizedGet(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
-        PlanDao planDao = new PlanDao();
-        List<Plan> plans = planDao.list();  // Lấy danh sách các plan đã bao gồm thông tin tổng hợp
+        PlanCampainDao planDao = new PlanCampainDao();
+        List<PlanCampain> plans = planDao.list();  // Lấy danh sách các plan đã bao gồm thông tin tổng hợp
 
         // Gửi dữ liệu tới JSP để hiển thị
         req.setAttribute("plans", plans);
