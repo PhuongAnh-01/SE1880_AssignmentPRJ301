@@ -138,5 +138,24 @@ public class PlanCampainDao extends DBContext<PlanCampain> {
         }
         return campain;
     }
+    public static void main(String[] args) {
+        // Khởi tạo PlanCampainDao (giả sử đã có thiết lập kết nối cơ sở dữ liệu trong lớp này)
+        PlanCampainDao planCampainDao = new PlanCampainDao();
 
+        // Kiểm tra với một planCampnID cụ thể (thay thế bằng một ID có sẵn trong database của bạn)
+        int testPlanCampnID = 70; // Đảm bảo ID này có trong CSDL của bạn để kiểm tra
+        PlanCampain campain = planCampainDao.get(testPlanCampnID);
+
+        // Kiểm tra kết quả trả về và in ra thông tin
+        if (campain != null) {
+            System.out.println("Plan Campaign ID: " + campain.getId());
+            System.out.println("Plan ID: " + (campain.getPlan() != null ? campain.getPlan().getId() : "No Plan"));
+            System.out.println("Product ID: " + (campain.getProduct() != null ? campain.getProduct().getId() : "No Product"));
+            System.out.println("Quantity: " + campain.getQuantity());
+            System.out.println("Estimated Cost: " + campain.getCost());
+        } else {
+            System.out.println("Plan Campaign with ID " + testPlanCampnID + " not found.");
+        }
+    }
+    
 }

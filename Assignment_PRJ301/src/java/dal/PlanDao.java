@@ -134,7 +134,7 @@ public class PlanDao extends DBContext<Plan> {
             }
 
             for (PlanCampain campain : entity.getCampains()) {
-                
+
                 String sql_update_campain = "UPDATE [dbo].[PlanCampain]\n"
                         + "     SET      ([PlanID] = ?\n"
                         + "           ,[ProductID] = ?\n"
@@ -215,8 +215,31 @@ public class PlanDao extends DBContext<Plan> {
 
     @Override
     public ArrayList<Plan> list() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ArrayList<Plan> plans = new ArrayList<>();
+        PreparedStatement command = null;
 
+        try {
+            String sql = "select * from [Plan]";
+            command = connection.prepareStatement(sql);
+            ResultSet rs = command.executeQuery();
+
+            while (rs.next()) {
+                Plan p = new Plan();
+                p.setId(rs.getInt("PlanID"));
+                p.setName(rs.getNString("PlanName"));
+                p.setStart(rs.getDate("StartDate"));
+                p.setEnd(rs.getDate("EndDate"));
+
+                Department d = new Department();
+                d.setId(rs.getInt("DepartmentID"));
+                p.setDept(d);
+
+                plans.add(p);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PlanDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return plans;
     }
 
     @Override
@@ -225,8 +248,7 @@ public class PlanDao extends DBContext<Plan> {
 
         PreparedStatement stm;
         try {
-            String sql = "SELECT p.PlanID, p.PlanName, p.StartDate, p.EndDate, \n"
-                    + "                    d.DepartmentID, d.DepartmentName \n"
+            String sql = "SELECT * \n"
                     + "                    FROM dbo.[Plan] p \n"
                     + "                     JOIN Department d ON p.DepartmentID = d.DepartmentID \n"
                     + "                     WHERE p.PlanID = ?";
@@ -234,65 +256,51 @@ public class PlanDao extends DBContext<Plan> {
             stm.setInt(1, planID);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
-                int departmentID = rs.getInt("DepartmentID"); //sql
-                String departmentName = rs.getString("DepartmentName");
+                //sql
 
-                Department dept = new Department(departmentID, departmentName);
                 plan = new Plan();
-                plan.setId(planID);
+                plan.setId(rs.getInt("PlanID"));
                 plan.setName(rs.getString("PlanName"));
                 plan.setStart(rs.getDate("StartDate"));
                 plan.setEnd(rs.getDate("EndDate"));
-                plan.setDept(dept);
+
+//                Department dept = new Department();
+//                int departmentID = rs.getInt("DepartmentID");
+//                String departmentName = rs.getString("DepartmentName");
+//                plan.setDept(dept);
+
+
+                Department d = new Department();
+                d.setId(rs.getInt("DepartmentID"));
+                d.setName(rs.getString("DepartmentName"));
+                plan.setDept(d);
 
             }
         } catch (SQLException ex) {
             Logger.getLogger(PlanDao.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return plan;
 
     }
 
     public static void main(String[] args) {
-        // Tạo đối tượng PlanDao để gọi phương thức insert
         PlanDao planDao = new PlanDao();
 
-        // Tạo đối tượng Department (Giả sử department có ID là 1)
-        Department dept = new Department();
-        dept.setId(1); // Thay thế với ID thật trong cơ sở dữ liệu
+        // Kiểm tra với một planID cụ thể (thay thế bằng một ID có sẵn trong database của bạn)
+        int testPlanID = 42; // Sử dụng ID phù hợp có trong database để kiểm tra
+        Plan plan = planDao.get(testPlanID);
 
-        // Tạo đối tượng Plan và thiết lập các giá trị
-        Plan plan = new Plan();
-        plan.setName("Kế hoạch sản xuất mẫu");
-        plan.setStart(Date.valueOf("2024-11-01"));
-        plan.setEnd(Date.valueOf("2024-11-30"));
-        plan.setDept(dept);
-
-        // Tạo danh sách PlanCampain và thêm vào Plan
-        List<PlanCampain> campains = new ArrayList<>();
-
-        // Tạo sản phẩm mẫu (Giả sử Product có ID là 1)
-        Product product = new Product();
-        product.setId(1); // Thay thế với ID thật trong cơ sở dữ liệu
-
-        // Tạo một PlanCampain mẫu
-        PlanCampain campain1 = new PlanCampain();
-        campain1.setProduct(product);
-        campain1.setQuantity(100);
-        campain1.setCost(500.0f);
-
-        // Thêm PlanCampain vào danh sách campains
-        campains.add(campain1);
-
-        // Gán danh sách PlanCampain cho Plan
-        plan.setCampains((ArrayList<PlanCampain>) campains);
-
-        // Thử gọi phương thức insert
-        try {
-            planDao.insert(plan);
-            System.out.println("Thêm kế hoạch sản xuất thành công!");
-        } catch (Exception e) {
-            System.out.println("Có lỗi xảy ra khi thêm kế hoạch sản xuất: " + e.getMessage());
+        if (plan != null) {
+            System.out.println("Plan ID: " + plan.getId());
+            System.out.println("Plan Name: " + plan.getName());
+            System.out.println("Start Date: " + plan.getStart());
+            System.out.println("End Date: " + plan.getEnd());
+            System.out.println("Department ID: " + plan.getDept().getId());
+            System.out.println("Department Name: " + plan.getDept().getName());
+        } else {
+            System.out.println("Plan with ID " + testPlanID + " not found.");
         }
     }
+
 }

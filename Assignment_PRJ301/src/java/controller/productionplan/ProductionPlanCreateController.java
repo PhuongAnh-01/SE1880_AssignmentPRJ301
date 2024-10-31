@@ -6,6 +6,7 @@ package controller.productionplan;
 
 import controller.accesscontrol.BaseRBACController;
 import dal.DepartmentDao;
+import dal.PlanCampainDao;
 import dal.PlanDao;
 import dal.ProductDao;
 import entity.accesscontrol.User;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Date;
+import java.util.ArrayList;
 import model.Department;
 import model.Plan;
 import model.PlanCampain;
@@ -32,6 +34,14 @@ public class ProductionPlanCreateController extends BaseRBACController {
         ProductDao dbProduct = new ProductDao();
         DepartmentDao dbDepts = new DepartmentDao();
 
+        PlanCampainDao dbCampaign = new PlanCampainDao();
+        
+        PlanDao pdb = new PlanDao();
+        ArrayList<Plan> ps = pdb.list();
+        ArrayList<PlanCampain> plans = dbCampaign.list();
+        
+        req.setAttribute("plans", plans);
+        req.setAttribute("ps", ps);
         req.setAttribute("products", dbProduct.list());
         req.setAttribute("depts", dbDepts.get("WS"));
         // -> 2 list trog request scope

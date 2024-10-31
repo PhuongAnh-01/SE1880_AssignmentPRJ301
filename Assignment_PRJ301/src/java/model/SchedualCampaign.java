@@ -12,13 +12,13 @@ public class SchedualCampaign {
     private int scID;
     private PlanCampain plancampain;
     private Date date;
-    private int shift;
+    private String shift;
     private int quantity;
 
     public SchedualCampaign() {
     }
 
-    public SchedualCampaign(int scID, PlanCampain plancampain, Date date, int shift, int quantity) {
+    public SchedualCampaign(int scID, PlanCampain plancampain, Date date, String shift, int quantity) {
         this.scID = scID;
         this.plancampain = plancampain;
         this.date = date;
@@ -50,11 +50,11 @@ public class SchedualCampaign {
         this.date = date;
     }
 
-    public int getShift() {
+    public String getShift() {
         return shift;
     }
 
-    public void setShift(int shift) {
+    public void setShift(String shift) {
         this.shift = shift;
     }
 
@@ -66,6 +66,5 @@ public class SchedualCampaign {
         this.quantity = quantity;
     }
 
-    
-    
+      
 }

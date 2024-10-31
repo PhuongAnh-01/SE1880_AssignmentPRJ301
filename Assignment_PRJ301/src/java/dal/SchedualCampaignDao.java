@@ -27,7 +27,7 @@ public class SchedualCampaignDao extends DBContext<SchedualCampaign> {
                 SchedualCampaign schedual = new SchedualCampaign();
                 schedual.setScID(rs.getInt("ScID"));
                 schedual.setDate(rs.getDate("Date"));
-                schedual.setShift(rs.getInt("Shift"));
+                schedual.setShift(rs.getString("Shift"));
                 schedual.setQuantity(rs.getInt("Quantity"));
                 schedules.add(schedual);
             }
@@ -51,26 +51,25 @@ public class SchedualCampaignDao extends DBContext<SchedualCampaign> {
                 + "           ,?\n"
                 + "           ,?)";
         
-        String sql_select = "SELECT @@IDENTITY as ScID";
         
         PreparedStatement stm_insert = null;
         PreparedStatement stm_select = null;
         
         try {
-            connection.setAutoCommit(false);
+            //connection.setAutoCommit(false);
             stm_insert = connection.prepareStatement(sql_insert);
             stm_insert.setInt(1, entity.getPlancampain().getId());
             stm_insert.setDate(2, entity.getDate());
-            stm_insert.setInt(3, entity.getShift());
+            stm_insert.setString(3, entity.getShift());
             stm_insert.setInt(4, entity.getQuantity());
             stm_insert.executeUpdate();
             
-            stm_select = connection.prepareStatement(sql_select);
-            ResultSet rs = stm_select.executeQuery();
-            if(rs.next()) {
-                entity.setScID(rs.getInt("ScID"));
-            }
-            connection.commit();
+//           // stm_select = connection.prepareStatement(sql_select);
+//            ResultSet rs = stm_select.executeQuery();
+//            if(rs.next()) {
+//                entity.setScID(rs.getInt("ScID"));
+//            }
+//            connection.commit();
         } catch (SQLException ex) {
             Logger.getLogger(SchedualCampaignDao.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -80,14 +79,14 @@ public class SchedualCampaignDao extends DBContext<SchedualCampaign> {
                 Logger.getLogger(SchedualCampaignDao.class.getName()).log(Level.SEVERE, null, ex1);
             }
         } finally {
-            try {
-                connection.setAutoCommit(true);
-                if(stm_insert != null) {
-                    stm_insert.close();
-                }
-                if(stm_select != null) {
-                    stm_select.close();
-                }
+           try {
+//                connection.setAutoCommit(true);
+//                if(stm_insert != null) {
+//                    stm_insert.close();
+//                }
+//                if(stm_select != null) {
+//                    stm_select.close();
+//                }
                 connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(SchedualCampaignDao.class.getName()).log(Level.SEVERE, null, ex);

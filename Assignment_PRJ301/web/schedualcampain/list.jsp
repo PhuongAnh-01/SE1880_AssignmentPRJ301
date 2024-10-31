@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-                <c:forEach var="p" items="${plans}">
+                <c:forEach var="p" items="${requestScope.plans}">
                     <tr>
                         <td>${p.id}</td>
                         <td>${p.plan.name}</td>
@@ -43,7 +43,7 @@
                         <td>${p.plan.dept.name}</td>
                         <td>${p.quantity}</td>
                         <td>
-                            <a href="../schedualcampain/create?planID=${p.id}" class="btn btn-primary">Tạo Lịch</a>
+                            <a href="../schedualcampain/create?PlanID=${p.plan.id}&PlanCampnID=${p.id}" class="btn btn-primary">Tạo Lịch</a>
                         </td>
                     </tr>
                 </c:forEach>
