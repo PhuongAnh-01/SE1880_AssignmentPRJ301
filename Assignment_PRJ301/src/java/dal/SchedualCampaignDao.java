@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.PlanCampain;
 import model.SchedualCampaign;
 
 /**
@@ -38,9 +39,16 @@ public class SchedualCampaignDao extends DBContext<SchedualCampaign> {
         
     }
 
-    @Override
-    public void insert(SchedualCampaign entity) {
-        String sql_insert = "INSERT INTO [dbo].[SchedualCampaign]\n"
+    public void insert(ArrayList<SchedualCampaign> schedules) {
+        
+        
+        
+        PreparedStatement stm_insert = null;
+        PreparedStatement stm_select = null;
+        
+        try {
+            connection.setAutoCommit(false);
+            String sql_insert = "INSERT INTO [dbo].[SchedualCampaign]\n"
                 + "           ([PlanCampnID]\n"
                 + "           ,[Date]\n"
                 + "           ,[Shift]\n"
@@ -50,19 +58,17 @@ public class SchedualCampaignDao extends DBContext<SchedualCampaign> {
                 + "           ,?\n"
                 + "           ,?\n"
                 + "           ,?)";
-        
-        
-        PreparedStatement stm_insert = null;
-        PreparedStatement stm_select = null;
-        
-        try {
-            //connection.setAutoCommit(false);
             stm_insert = connection.prepareStatement(sql_insert);
-            stm_insert.setInt(1, entity.getPlancampain().getId());
-            stm_insert.setDate(2, entity.getDate());
-            stm_insert.setString(3, entity.getShift());
-            stm_insert.setInt(4, entity.getQuantity());
-            stm_insert.executeUpdate();
+            for (SchedualCampaign sc : schedules) {
+                PlanCampain p = new PlanCampain();
+                    stm_insert.setInt(1, sc.getPlancampain().getId());
+                    stm_insert.setDate(2, sc.getDate());
+                    stm_insert.setString(3, sc.getShift());
+                    stm_insert.setInt(4, sc.getQuantity());
+                    stm_insert.addBatch();
+            }
+            
+            stm_insert.executeBatch();
             
 //           // stm_select = connection.prepareStatement(sql_select);
 //            ResultSet rs = stm_select.executeQuery();
@@ -80,13 +86,13 @@ public class SchedualCampaignDao extends DBContext<SchedualCampaign> {
             }
         } finally {
            try {
-//                connection.setAutoCommit(true);
-//                if(stm_insert != null) {
-//                    stm_insert.close();
-//                }
-//                if(stm_select != null) {
-//                    stm_select.close();
-//                }
+                connection.setAutoCommit(true);
+                if(stm_insert != null) {
+                    stm_insert.close();
+                }
+                if(stm_select != null) {
+                    stm_select.close();
+                }
                 connection.close();
             } catch (SQLException ex) {
                 Logger.getLogger(SchedualCampaignDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -115,6 +121,10 @@ public class SchedualCampaignDao extends DBContext<SchedualCampaign> {
     @Override
     public SchedualCampaign get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void insert(SchedualCampaign entity) {
     }
 
 }

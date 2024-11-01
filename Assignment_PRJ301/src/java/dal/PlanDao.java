@@ -113,16 +113,18 @@ public class PlanDao extends DBContext<Plan> {
             connection.setAutoCommit(false);
 
             String sql_update_plan = "UPDATE [dbo].[Plan]\n"
-                    + "     SET      ([PlanName]= ?\n"
-                    + "           ,[StartDate]= ?\n"
-                    + "           ,[EndDate]= ?\n"
-                    + "           ,[DepartmentID]= ?)\n";
+        + "     SET PlanName = ?,\n"
+        + "         StartDate = ?,\n"
+        + "         EndDate = ?,\n"
+        + "         DepartmentID = ?\n"
+        + "     WHERE PlanID = ?";
 
             PreparedStatement stm_update_plan = connection.prepareStatement(sql_update_plan);
             stm_update_plan.setString(1, entity.getName());
             stm_update_plan.setDate(2, entity.getStart());
             stm_update_plan.setDate(3, entity.getEnd());
             stm_update_plan.setInt(4, entity.getDept().getId());
+            stm_update_plan.setInt(5, entity.getId());
             stm_update_plan.executeUpdate();
 
             String sql_select_pLan = "SELECT @@IDENTITY as PlanID";

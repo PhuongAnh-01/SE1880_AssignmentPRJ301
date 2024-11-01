@@ -36,7 +36,7 @@
             <tbody>
                 <c:forEach var="p" items="${requestScope.plans}">
                     <tr>
-                        <td>${p.id}</td>
+                        <td>${p.plan.id}</td>
                         <td>${p.plan.name}</td>
                         <td>${p.plan.start}</td>
                         <td>${p.plan.end}</td>
