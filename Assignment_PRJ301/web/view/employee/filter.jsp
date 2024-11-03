@@ -12,6 +12,65 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Filter Employees</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Poppins', sans-serif;
+                background: linear-gradient(to right, #f0e6d6, #e6ccb2);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 0;
+                padding: 20px;
+            }
+            .container {
+                background-color: #fff;
+                padding: 40px;
+                border-radius: 25px;
+                box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+                max-width: 800px;
+                width: 100%;
+            }
+            h2, h3 {
+                color: #5a3e36;
+                font-weight: 600;
+            }
+            .btn-primary {
+                background-color: #5a3e36;
+                border: none;
+                border-radius: 20px;
+                padding: 10px 0;
+                font-size: 1.1rem;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            }
+            .btn-primary:hover {
+                background-color: #4e342e;
+            }
+            .btn-secondary {
+                background-color: #8b1e1e;
+                border: none;
+                font-weight: bold;
+                border-radius: 20px;
+            }
+            .btn-secondary:hover {
+                background-color: #7a1a1a;
+            }
+            .form-label {
+                color: #5a3e36;
+                font-weight: 500;
+            }
+            .table {
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            }
+            th {
+                background-color: #e6ccb2;
+                color: #5a3e36;
+            }
+        </style>
     </head>
     <body>
         <div class="container mt-5">

@@ -16,18 +16,20 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
             body {
-                background-color: #f4f4f4;
+                font-family: 'Poppins', sans-serif;
+                background: linear-gradient(to right, #f0e6d6, #e6ccb2);
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 100vh;
-                position: relative;
+                min-height: 100vh;
+                margin: 0;
+                padding: 20px;
             }
             .form-container {
                 background-color: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+                padding: 40px;
+                border-radius: 25px;
+                box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
                 max-width: 800px;
                 width: 100%;
             }
@@ -35,21 +37,58 @@
                 position: absolute;
                 top: 20px;
                 left: 20px;
+                background-color: #b9855d;
+                border: none;
+                border-radius: 20px;
+                padding: 10px 20px;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            }
+            .back-button:hover {
+                background-color: #a76f4c;
+            }
+            h2 {
+                color: #5a3e36;
+                font-weight: 600;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .btn-primary {
+                background-color: #5a3e36;
+                border: none;
+                border-radius: 20px;
+                padding: 10px 20px;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            }
+            .btn-primary:hover {
+                background-color: #4e342e;
+            }
+            .table {
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            }
+            th {
+                background-color: #e6ccb2;
+                color: #5a3e36;
             }
         </style>
     </head>
     <body>
         <!-- Nút Back -->
-        <a href="list" class="btn btn-secondary back-button">Back</a>
+        <a href="list" class="btn back-button">Back</a>
 
         <!-- Form tạo Plan -->
         <div class="form-container">
             <h2 class="text-center mb-4">Create New Plan</h2>
             <c:if test="${not empty message}">
-    <div class="alert alert-danger text-center" role="alert">
-        ${message}
-    </div>
-</c:if>
+                <div class="alert alert-danger text-center" role="alert">
+                    ${message}
+                </div>
+            </c:if>
             <form action="create" method="POST">
 
                 <!-- Tên kế hoạch -->

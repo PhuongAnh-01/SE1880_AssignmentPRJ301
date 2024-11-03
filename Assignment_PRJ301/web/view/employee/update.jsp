@@ -16,23 +16,61 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
             body {
-                background-color: #f4f4f4;
+                font-family: 'Poppins', sans-serif;
+                background: linear-gradient(to right, #f0e6d6, #e6ccb2);
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
+                margin: 0;
             }
             .form-container {
-                background-color: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+                background-color: #fff;
+                padding: 40px;
+                border-radius: 25px;
+                box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
                 max-width: 600px;
                 width: 100%;
+            }
+            .back-button {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                background-color: #8b1e1e;
+                border: none;
+                font-weight: bold;
+                border-radius: 20px;
+            }
+            .back-button:hover {
+                background-color: #7a1a1a;
+            }
+            h2 {
+                font-weight: 600;
+                color: #5a3e36;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .btn-primary {
+                background-color: #5a3e36;
+                border: none;
+                border-radius: 20px;
+                padding: 10px 0;
+                font-size: 1.1rem;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            }
+            .btn-primary:hover {
+                background-color: #4e342e;
+            }
+            .form-label {
+                color: #5a3e36;
+                font-weight: 500;
             }
         </style>
     </head>
     <body>
+        <a href="list" class="btn btn-danger back-button">Back</a>
         <div class="form-container">
             <h2 class="text-center mb-4">Update Employee</h2>
             <form action="update" method="POST">

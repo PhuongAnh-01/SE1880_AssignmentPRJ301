@@ -56,6 +56,10 @@
         <servlet-name>SchedualEmployeeListController</servlet-name>
         <servlet-class>controller.schedualemployee.SchedualEmployeeListController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SchedualEmployeeCreateController</servlet-name>
+        <servlet-class>controller.schedualemployee.SchedualEmployeeCreateController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -111,6 +115,10 @@
     <servlet-mapping>
         <servlet-name>SchedualEmployeeListController</servlet-name>
         <url-pattern>/schedualemployee/list</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SchedualEmployeeCreateController</servlet-name>
+        <url-pattern>/schedualemployee/create</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>120</session-timeout>

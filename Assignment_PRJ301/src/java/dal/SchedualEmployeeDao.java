@@ -25,16 +25,30 @@ public class SchedualEmployeeDao extends DBContext<SchedualEmployee> {
 
     @Override
     public void insert(SchedualEmployee entity) {
+        String sql = "INSERT INTO dbo.SchedualEmployee (SchEmpID, ScID, EmployeeID, Quantity) VALUES (?, ?, ?, ?)";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, entity.getSchEmpID());
+            st.setInt(2, entity.getSchedualCampaign().getScID());
+            st.setInt(3, entity.getEmployee().getId());
+            st.setDouble(4, entity.getQuantity());
+
+            int rowsInserted = st.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("A new record was inserted successfully!");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SchedualEmployeeDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+@Override
+public void update(SchedualEmployee entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void update(SchedualEmployee entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void delete(SchedualEmployee entity) {
+public void delete(SchedualEmployee entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -78,15 +92,17 @@ public class SchedualEmployeeDao extends DBContext<SchedualEmployee> {
 
                 list.add(se);
 
-            }
+}
         } catch (SQLException ex) {
-            Logger.getLogger(SchedualCampaignDao.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SchedualCampaignDao.class  
+
+.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
     }
 
     @Override
-    public SchedualEmployee get(int id) {
+public SchedualEmployee get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
