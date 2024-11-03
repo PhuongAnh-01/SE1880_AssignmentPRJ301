@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="mytag" uri="/WEB-INF/tlds/emp.tld" %>
 
 
 <!DOCTYPE html>
@@ -17,10 +18,10 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <script>
-            function removeEmployee(id){
+            function removeEmployee(id) {
                 var result = confirm("Are you sure you want to delete this employee?");
-                if(result) {
-                    document.getElementById("removeEmployee"+id).submit();
+                if (result) {
+                    document.getElementById("removeEmployee" + id).submit();
                 }
             }
         </script>
@@ -33,8 +34,8 @@
                     <button type="submit" class="btn btn-success">Create New Employee</button>
                 </form>
                 <form action="filter" method="GET" style="display: inline;">
-                <button type="submit" class="btn btn-info">Filter Employee</button>
-            </form>
+                    <button type="submit" class="btn btn-info">Filter Employee</button>
+                </form>
             </div>
             <table class="table table-striped table-bordered">
                 <thead>
@@ -65,14 +66,16 @@
                                 </c:choose>
                             </td>
                             <td>${e.address}</td>
-                            <td>${e.dob}</td>
+
+                            <td><mytag:ToVietnameseDate value="${e.dob}" /></td>
+
                             <td>${e.role.name}</td>
                             <td>${e.department}</td>
                             <td>
                                 <a href="update?id=${e.id}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-pencil-alt"></i> <!-- Biểu tượng Edit -->
                                 </a>
-                                
+
                                 <button type="button" class="btn btn-danger btn-sm" onclick="removeEmployee(${e.id})">
                                     <i class="fas fa-trash-alt"></i> <!-- Biểu tượng Remove -->
                                 </button>

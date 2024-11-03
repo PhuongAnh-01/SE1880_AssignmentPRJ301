@@ -44,6 +44,8 @@ public class ProductionPlanUpdateController extends BaseRBACController {
             PlanCampainDao pcdao = new PlanCampainDao();
             ProductDao productDao = new ProductDao();
             ArrayList<PlanCampain> pc = pcdao.list();
+            
+            
             ArrayList<Product> products = productDao.list();
 
             req.setAttribute("products", products);

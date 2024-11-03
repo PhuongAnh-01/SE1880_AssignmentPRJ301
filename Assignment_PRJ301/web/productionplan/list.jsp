@@ -3,6 +3,8 @@
     Created on : Oct 22, 2024, 2:26:00 AM
     Author     : ADMIN
 --%>
+<%@ taglib prefix="mytag" uri="/WEB-INF/tlds/customtag.tld" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -46,8 +48,9 @@
                         <tr>
                             <td>${p.plan.id}</td>
                             <td>${p.plan.name}</td>
-                            <td>${p.plan.start}</td>
-                            <td>${p.plan.end}</td>
+
+                            <td><mytag:ToVietnameseDate value="${p.plan.start}" /></td>
+                            <td><mytag:ToVietnameseDate value="${p.plan.end}" /></td>
                             <td>${p.plan.dept.name}</td>
                             <td>${p.quantity}</td>
                             <td>

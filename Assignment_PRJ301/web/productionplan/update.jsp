@@ -83,9 +83,9 @@
                     <tbody>
                         <c:forEach items="${products}" var="p">
                             <tr>
-                                <td>${p.name}<input type="hidden" name="pid" value="${p.id}"/></td>
-                                <td><input type="number" class="form-control" name="quantity${p.id}" placeholder="Enter quantity" required></td>
-                                <td><input type="number" class="form-control" name="cost${p.id}" placeholder="Enter cost" required></td>
+                                <td>${p.name}</td>
+                                <td><input type="number" class="form-control" name="quantity=${p.id}" placeholder="Enter quantity" required></td>
+                                <td><input type="number" class="form-control" name="cost=${p.id}" placeholder="Enter cost" required></td>
                             </tr>
                         </c:forEach>
                     </tbody>
