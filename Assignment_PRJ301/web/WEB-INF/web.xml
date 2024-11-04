@@ -53,14 +53,6 @@
         <servlet-class>controller.schedualemployee.SchedualEmployeeListController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>SchedualEmployeeCreateController</servlet-name>
-        <servlet-class>controller.schedualemployee.SchedualEmployeeCreateController</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ProductionPlanUpdateController</servlet-name>
-        <servlet-class>controller.productionplan.ProductionPlanUpdateController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>SchedualDetailController</servlet-name>
         <servlet-class>controller.schedualcampain.SchedualDetailController</servlet-class>
     </servlet>
@@ -115,14 +107,6 @@
     <servlet-mapping>
         <servlet-name>SchedualEmployeeListController</servlet-name>
         <url-pattern>/schedualemployee/list</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>SchedualEmployeeCreateController</servlet-name>
-        <url-pattern>/schedualemployee/create</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ProductionPlanUpdateController</servlet-name>
-        <url-pattern>/productionplan/update</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SchedualDetailController</servlet-name>

@@ -29,7 +29,6 @@ public class LoginController extends HttpServlet {
 
         if (account != null) {
             req.getSession().setAttribute("account", account);
-            // Điều hướng dựa trên vai trò của người dùng
             switch (role) {
                 case "Human Resource Management":
                     resp.sendRedirect("employee/list");

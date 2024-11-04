@@ -94,16 +94,24 @@
                 border: none;
                 font-weight: bold;
             }
+            .emp-button {
+                position: absolute;
+                top: 60px; 
+                right: 20px; 
+                background-color: #8b1e1e;
+                border: none;
+                font-weight: bold;
+            }
 
         </style>
     </head>
     <body>
         <a href="${pageContext.request.contextPath}/schedualcampain/detail" class="btn btn-danger detail-button">Detail Schedual</a>
-
+        <a href="${pageContext.request.contextPath}/schedualemployee/list" class="btn btn-danger emp-button">Employee Schedual</a>
         <a href="${pageContext.request.contextPath}/logout" class="btn btn-danger logout-button">Logout</a>
         <div class="container mt-5">
             <div class="d-flex justify-content-between mb-3">
-                <h2>Danh sách Kế hoạch Sản xuất</h2>
+                <h2>Schedual Campain List</h2>
             </div>
 
             <table class="table table-striped table-bordered">

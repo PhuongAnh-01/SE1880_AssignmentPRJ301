@@ -5,7 +5,9 @@
 
 package controller.schedualemployee;
 
+import controller.accesscontrol.BaseRBACController;
 import dal.SchedualEmployeeDao;
+import entity.accesscontrol.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,44 +21,25 @@ import model.SchedualEmployee;
  *
  * @author ADMIN
  */
-public class SchedualEmployeeListController extends HttpServlet {
-   
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SchedualEmployeeListController</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SchedualEmployeeListController at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
+public class SchedualEmployeeListController extends BaseRBACController  {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+    protected void doAuthorizedGet(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
         SchedualEmployeeDao seDao = new SchedualEmployeeDao();
         ArrayList<SchedualEmployee> list = seDao.list();
 
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("../schedualemployee/list.jsp").forward(request, response);
+        req.setAttribute("list", list);
+        req.getRequestDispatcher("../schedualemployee/list.jsp").forward(req, resp);
     } 
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doAuthorizedPost(HttpServletRequest req, HttpServletResponse resp, User account) throws ServletException, IOException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    }
 
-}
+    
+   
+
+
