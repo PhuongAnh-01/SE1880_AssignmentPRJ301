@@ -134,9 +134,6 @@
                             <td>${p.quantity}</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <a href="update?id=${p.plan.id}" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </a>
                                     <button type="button" class="btn btn-danger btn-sm" onclick="removePlan(${p.plan.id})">
                                         <i class="fas fa-trash"></i>
                                     </button>

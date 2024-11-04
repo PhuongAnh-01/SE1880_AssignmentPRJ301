@@ -13,39 +13,53 @@
         <meta charset="UTF-8">
         <title>Bảng Lịch Làm Việc</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         <style>
             body {
-                font-family: Arial, sans-serif;
+                font-family: 'Poppins', sans-serif;
+                background: linear-gradient(to right, #f0e6d6, #e6ccb2);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
                 margin: 0;
-                padding: 0;
-                background-color: #f9f9f9;
+                padding: 20px;
             }
             .container {
+                background-color: #fff;
+                padding: 40px;
+                border-radius: 25px;
+                box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
                 max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
+                width: 100%;
             }
             h1 {
                 text-align: center;
-                color: #333;
+                color: #5a3e36;
+                font-weight: 600;
                 margin-bottom: 30px;
+            }
+            h3, h4 {
+                color: #5a3e36;
             }
             table {
                 width: 100%;
+                border-radius: 15px;
+                overflow: hidden;
                 border-collapse: collapse;
-                margin-bottom: 20px;
                 background-color: #fff;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
             }
-            th, td {
+            th {
+                background-color: #e6ccb2;
+                color: #5a3e36;
+                text-transform: uppercase;
+            }
+            td, th {
                 padding: 10px;
                 border: 1px solid #ddd;
                 text-align: center;
-            }
-            th {
-                background-color: #4CAF50;
-                color: white;
-                text-transform: uppercase;
             }
             tr:nth-child(even) {
                 background-color: #f2f2f2;
@@ -53,14 +67,47 @@
             tr:hover {
                 background-color: #eaeaea;
             }
+            .submit-btn {
+                background-color: #b9855d;
+                color: white;
+                border: none;
+                border-radius: 20px;
+                padding: 10px 20px;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                cursor: pointer;
+                display: block;
+                margin: 0 auto;
+            }
+            .submit-btn:hover {
+                background-color: #a76f4c;
+            }
+            
+            .back-button {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                background-color: #b9855d;
+                border: none;
+                border-radius: 20px;
+                padding: 10px 20px;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            }
+            .back-button:hover {
+                background-color: #a76f4c;
+            }
+            
         </style>
     </head>
     <body>
-
-        <div class="container">
+        <a href="list" class="btn back-button">Back</a>
+        <div class="container mt-5">
             <h1>Schedule Campaign</h1>
             <c:if test="${not empty error}">
-                <div class="error-message">${error}</div>
+                <div class="alert alert-danger">${error}</div>
             </c:if>
 
             <h3>Plan: ${plan.name}</h3>
@@ -68,7 +115,7 @@
 
             <form action="create" method="POST">
                 <input type="hidden" name="PlanCampnID" value="${planCampain.id}"/>
-                <table>
+                <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -84,18 +131,19 @@
                                     <input type="hidden" name="date" value="${date}"/>
                                     ${date}
                                 </td>
-                                <td><input type="number" name="quantity${date}k1" min="0" required/></td>
-                                <td><input type="number" name="quantity${date}k2" min="0" required/></td>
-                                <td><input type="number" name="quantity${date}k3" min="0" required/></td>
+                                <td><input type="number" class="form-control" name="quantity${date}k1" min="0" required/></td>
+                                <td><input type="number" class="form-control" name="quantity${date}k2" min="0" required/></td>
+                                <td><input type="number" class="form-control" name="quantity${date}k3" min="0" required/></td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
-                
+
                 <input type="submit" value="Save" class="submit-btn"/>
             </form>
         </div>
-<input type="hidden" name="PlanCampnID" value="${planCampain.id}">
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     </body>
 </html>

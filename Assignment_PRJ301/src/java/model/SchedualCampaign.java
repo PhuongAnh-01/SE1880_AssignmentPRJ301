@@ -14,16 +14,18 @@ public class SchedualCampaign {
     private Date date;
     private String shift;
     private int quantity;
+    private Plan plan;
 
     public SchedualCampaign() {
     }
 
-    public SchedualCampaign(int scID, PlanCampain plancampain, Date date, String shift, int quantity) {
+    public SchedualCampaign(int scID, PlanCampain plancampain, Date date, String shift, int quantity, Plan plan) {
         this.scID = scID;
         this.plancampain = plancampain;
         this.date = date;
         this.shift = shift;
         this.quantity = quantity;
+        this.plan = plan;
     }
 
     public int getScID() {
@@ -66,5 +68,13 @@ public class SchedualCampaign {
         this.quantity = quantity;
     }
 
-      
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(Plan plan) {
+        this.plan = plan;
+    }
+
+    
 }
